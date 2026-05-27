@@ -27,5 +27,10 @@
 - Scheduler CPU test job `aff60dc0-5e4` completed successfully inside the packaged container.
 - The job reran `bash scripts/run.sh` and passed `python validate.py --compare` with both `synthetic_temporal_sorting` and `deferred_depth_update_ablation` present in `scoring/scores.json`.
 
+### [2026-05-27 02:53] - core_claim_plus
+- Replaced the earlier deletion oracle with a valid-bit flow: rasterization-like visibility marks outgoing Gaussians, and the next merge step removes invalid entries.
+- Extended `scoring/scores.json` with adjacent-pair, sampled-pair, and deferred-update MB metrics, then locally reran reproduction, train/test evaluation, and validation successfully.
+- Updated results remain at `core_claim_plus`: Neo reduces table traffic by 50.8310% on the scaled temporal workload and saves 28.9147% traffic versus the no-deferred-depth ablation while preserving broad ordering structure.
+
 ## Stop Justification
 - Completed at milestone `core_claim_plus`.

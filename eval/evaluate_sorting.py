@@ -29,7 +29,13 @@ def _rank_error_metrics(predicted_ids: list[int], ideal_tile: list[dict]) -> dic
         extra = set(predicted_ids) - set(ideal_ids)
         raise ValueError(f"Predicted order does not match tile membership: missing={len(missing)} extra={len(extra)}")
     if not predicted_ids:
-        return {"mean_abs_rank_error": 0.0, "p99_abs_rank_error": 0.0, "pair_order_accuracy": 1.0}
+        return {
+            "mean_abs_rank_error": 0.0,
+            "p99_abs_rank_error": 0.0,
+            "pair_order_accuracy": 1.0,
+            "adjacent_pair_accuracy": 1.0,
+            "sampled_pair_order_accuracy": 1.0,
+        }
 
     errors = sorted(abs(idx - ideal_rank[row_id]) for idx, row_id in enumerate(predicted_ids))
     mean_error = sum(errors) / len(errors)
@@ -37,17 +43,38 @@ def _rank_error_metrics(predicted_ids: list[int], ideal_tile: list[dict]) -> dic
 
     correct_pairs = 0
     total_pairs = 0
-    for stride in (32, 64, 128):
-        if stride >= len(predicted_ids):
+    pair_step = max(len(predicted_ids) // 64, 1)
+    for offset in (1, 2, 4, 8, 16, 32, 64, 128):
+        if offset >= len(predicted_ids):
             continue
-        for idx in range(0, len(predicted_ids) - stride, stride):
+        for idx in range(0, len(predicted_ids) - offset, pair_step):
             total_pairs += 1
-            if ideal_rank[predicted_ids[idx]] <= ideal_rank[predicted_ids[idx + stride]]:
+            if ideal_rank[predicted_ids[idx]] <= ideal_rank[predicted_ids[idx + offset]]:
                 correct_pairs += 1
+    adjacent_pairs = max(len(predicted_ids) - 1, 0)
+    adjacent_correct = sum(
+        1
+        for idx in range(adjacent_pairs)
+        if ideal_rank[predicted_ids[idx]] <= ideal_rank[predicted_ids[idx + 1]]
+    )
+
+    sampled_correct = 0
+    sampled_total = 0
+    sample_step = max(len(predicted_ids) // 64, 1)
+    for offset in (3, 5, 9, 17, 33, 65, 129):
+        if offset >= len(predicted_ids):
+            continue
+        start = min(offset // 2, len(predicted_ids) - offset - 1)
+        for idx in range(start, len(predicted_ids) - offset, sample_step):
+            sampled_total += 1
+            if ideal_rank[predicted_ids[idx]] <= ideal_rank[predicted_ids[idx + offset]]:
+                sampled_correct += 1
     return {
         "mean_abs_rank_error": mean_error,
         "p99_abs_rank_error": float(p99_error),
         "pair_order_accuracy": correct_pairs / total_pairs if total_pairs else 1.0,
+        "adjacent_pair_accuracy": adjacent_correct / adjacent_pairs if adjacent_pairs else 1.0,
+        "sampled_pair_order_accuracy": sampled_correct / sampled_total if sampled_total else 1.0,
     }
 
 
@@ -56,6 +83,8 @@ def _scene_metrics(scene_artifact: dict, scene_workload: dict) -> dict:
     total_entries = 0
     traffic_entries = 0
     weighted_pair_accuracy = 0.0
+    weighted_adjacent_pair_accuracy = 0.0
+    weighted_sampled_pair_accuracy = 0.0
     weighted_mean_rank = 0.0
     weighted_p99_rank = 0.0
 
@@ -70,12 +99,16 @@ def _scene_metrics(scene_artifact: dict, scene_workload: dict) -> dict:
             total_entries += entries
             traffic_entries += int(tile_output["traffic_entries"])
             weighted_pair_accuracy += metrics["pair_order_accuracy"] * entries
+            weighted_adjacent_pair_accuracy += metrics["adjacent_pair_accuracy"] * entries
+            weighted_sampled_pair_accuracy += metrics["sampled_pair_order_accuracy"] * entries
             weighted_mean_rank += metrics["mean_abs_rank_error"] * entries
             weighted_p99_rank += metrics["p99_abs_rank_error"] * entries
 
     denom = max(total_entries, 1)
     return {
         "pair_order_accuracy": weighted_pair_accuracy / denom,
+        "adjacent_pair_accuracy": weighted_adjacent_pair_accuracy / denom,
+        "sampled_pair_order_accuracy": weighted_sampled_pair_accuracy / denom,
         "mean_abs_rank_error": weighted_mean_rank / denom,
         "p99_abs_rank_error": weighted_p99_rank / denom,
         "traffic_entries": traffic_entries,
@@ -98,6 +131,8 @@ def _aggregate(scene_metrics: dict[str, dict]) -> dict:
     total_entries = sum(scene["entries"] for scene in scene_metrics.values()) or 1
     return {
         "pair_order_accuracy": sum(s["pair_order_accuracy"] * s["entries"] for s in scene_metrics.values()) / total_entries,
+        "adjacent_pair_accuracy": sum(s["adjacent_pair_accuracy"] * s["entries"] for s in scene_metrics.values()) / total_entries,
+        "sampled_pair_order_accuracy": sum(s["sampled_pair_order_accuracy"] * s["entries"] for s in scene_metrics.values()) / total_entries,
         "mean_abs_rank_error": sum(s["mean_abs_rank_error"] * s["entries"] for s in scene_metrics.values()) / total_entries,
         "p99_abs_rank_error": sum(s["p99_abs_rank_error"] * s["entries"] for s in scene_metrics.values()) / total_entries,
         "traffic_MB": sum(scene["traffic_MB"] for scene in scene_metrics.values()),
@@ -114,12 +149,16 @@ def _scene_scores(neo_scenes: dict[str, dict], baseline_scenes: dict[str, dict])
         results[f"full_sort_{scene_name}"] = {
             "traffic_reduction_pct": 0.0,
             "pair_order_accuracy": baseline["pair_order_accuracy"],
+            "adjacent_pair_accuracy": baseline["adjacent_pair_accuracy"],
+            "sampled_pair_order_accuracy": baseline["sampled_pair_order_accuracy"],
             "traffic_MB": baseline["traffic_MB"],
             "mean_abs_rank_error": baseline["mean_abs_rank_error"],
             "p99_abs_rank_error": baseline["p99_abs_rank_error"],
         }
         results[f"neo_reuse_update_{scene_name}"] = {
             "pair_order_accuracy": neo["pair_order_accuracy"],
+            "adjacent_pair_accuracy": neo["adjacent_pair_accuracy"],
+            "sampled_pair_order_accuracy": neo["sampled_pair_order_accuracy"],
             "traffic_MB": neo["traffic_MB"],
             "traffic_reduction_pct": reduction,
             "mean_abs_rank_error": neo["mean_abs_rank_error"],
@@ -143,12 +182,16 @@ def evaluate(neo_path: Path, baseline_path: Path, output_path: Path) -> None:
         "full_sort": {
             "traffic_reduction_pct": 0.0,
             "pair_order_accuracy": baseline["pair_order_accuracy"],
+            "adjacent_pair_accuracy": baseline["adjacent_pair_accuracy"],
+            "sampled_pair_order_accuracy": baseline["sampled_pair_order_accuracy"],
             "traffic_MB": baseline["traffic_MB"],
             "mean_abs_rank_error": baseline["mean_abs_rank_error"],
             "p99_abs_rank_error": baseline["p99_abs_rank_error"],
         },
         "neo_reuse_update": {
             "pair_order_accuracy": neo["pair_order_accuracy"],
+            "adjacent_pair_accuracy": neo["adjacent_pair_accuracy"],
+            "sampled_pair_order_accuracy": neo["sampled_pair_order_accuracy"],
             "traffic_MB": neo["traffic_MB"],
             "traffic_reduction_pct": reduction,
             "mean_abs_rank_error": neo["mean_abs_rank_error"],
@@ -174,18 +217,23 @@ def evaluate(neo_path: Path, baseline_path: Path, output_path: Path) -> None:
                 "full_sort": {
                     **experiment_results["full_sort"],
                     "deferred_update_savings_pct": 0.0,
+                    "deferred_update_savings_MB": 0.0,
                 },
                 "neo_no_deferred_depth_update": {
                     "pair_order_accuracy": no_deferred["pair_order_accuracy"],
+                    "adjacent_pair_accuracy": no_deferred["adjacent_pair_accuracy"],
+                    "sampled_pair_order_accuracy": no_deferred["sampled_pair_order_accuracy"],
                     "traffic_MB": no_deferred["traffic_MB"],
                     "traffic_reduction_pct": no_deferred_reduction,
                     "deferred_update_savings_pct": 0.0,
+                    "deferred_update_savings_MB": 0.0,
                     "mean_abs_rank_error": no_deferred["mean_abs_rank_error"],
                     "p99_abs_rank_error": no_deferred["p99_abs_rank_error"],
                 },
                 "neo_reuse_update": {
                     **experiment_results["neo_reuse_update"],
                     "deferred_update_savings_pct": deferred_savings,
+                    "deferred_update_savings_MB": no_deferred["traffic_MB"] - neo["traffic_MB"],
                 },
             }
         }

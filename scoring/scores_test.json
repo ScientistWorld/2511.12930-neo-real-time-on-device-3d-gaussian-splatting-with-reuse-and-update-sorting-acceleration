@@ -12,17 +12,17 @@
           "pair_order_accuracy": 1.0,
           "adjacent_pair_accuracy": 1.0,
           "sampled_pair_order_accuracy": 1.0,
-          "traffic_MB": 15.482879999999998,
+          "traffic_MB": 15.48288,
           "mean_abs_rank_error": 0.0,
           "p99_abs_rank_error": 0.0
         },
         "neo_reuse_update": {
-          "traffic_reduction_pct": 55.9548611111111,
-          "pair_order_accuracy": 0.9089391119495255,
-          "adjacent_pair_accuracy": 0.6560345377745961,
-          "sampled_pair_order_accuracy": 0.9624261257452209,
-          "traffic_MB": 6.819456000000001,
-          "mean_abs_rank_error": 1.7211371527777777,
+          "traffic_reduction_pct": 50.561342592592595,
+          "pair_order_accuracy": 0.9088411496559042,
+          "adjacent_pair_accuracy": 0.6561587384187847,
+          "sampled_pair_order_accuracy": 0.9624356706732042,
+          "traffic_MB": 7.654528,
+          "mean_abs_rank_error": 1.7203621031746033,
           "p99_abs_rank_error": 6.484126984126984
         }
       }
@@ -34,33 +34,33 @@
           "pair_order_accuracy": 1.0,
           "adjacent_pair_accuracy": 1.0,
           "sampled_pair_order_accuracy": 1.0,
-          "traffic_MB": 15.482879999999998,
+          "traffic_MB": 15.48288,
           "mean_abs_rank_error": 0.0,
           "p99_abs_rank_error": 0.0,
           "deferred_update_savings_pct": 0.0,
           "deferred_update_savings_MB": 0.0
         },
         "neo_no_deferred_depth_update": {
-          "traffic_reduction_pct": 35.95486111111109,
-          "pair_order_accuracy": 0.9089391119495255,
-          "adjacent_pair_accuracy": 0.6560345377745961,
-          "sampled_pair_order_accuracy": 0.9624261257452209,
-          "traffic_MB": 9.916032000000001,
-          "mean_abs_rank_error": 1.7211371527777777,
+          "traffic_reduction_pct": 30.561342592592588,
+          "pair_order_accuracy": 0.9088411496559042,
+          "adjacent_pair_accuracy": 0.6561587384187847,
+          "sampled_pair_order_accuracy": 0.9624356706732042,
+          "traffic_MB": 10.751104,
+          "mean_abs_rank_error": 1.7203621031746033,
           "p99_abs_rank_error": 6.484126984126984,
           "deferred_update_savings_pct": 0.0,
           "deferred_update_savings_MB": 0.0
         },
         "neo_reuse_update": {
-          "traffic_reduction_pct": 55.9548611111111,
-          "pair_order_accuracy": 0.9089391119495255,
-          "adjacent_pair_accuracy": 0.6560345377745961,
-          "sampled_pair_order_accuracy": 0.9624261257452209,
-          "traffic_MB": 6.819456000000001,
-          "mean_abs_rank_error": 1.7211371527777777,
+          "traffic_reduction_pct": 50.561342592592595,
+          "pair_order_accuracy": 0.9088411496559042,
+          "adjacent_pair_accuracy": 0.6561587384187847,
+          "sampled_pair_order_accuracy": 0.9624356706732042,
+          "traffic_MB": 7.654528,
+          "mean_abs_rank_error": 1.7203621031746033,
           "p99_abs_rank_error": 6.484126984126984,
-          "deferred_update_savings_pct": 31.22797506099214,
-          "deferred_update_savings_MB": 3.0965760000000007
+          "deferred_update_savings_pct": 28.802400200016663,
+          "deferred_update_savings_MB": 3.0965759999999998
         }
       }
     }

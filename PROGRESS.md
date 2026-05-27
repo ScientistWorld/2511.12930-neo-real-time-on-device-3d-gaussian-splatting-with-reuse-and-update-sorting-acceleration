@@ -18,14 +18,16 @@
 - Added `deferred_depth_update_ablation`: `method/neo_sort.py` can now run a no-deferred-depth variant that charges a separate depth refresh pass, and `eval/evaluate_sorting.py` scores it from artifacts without importing method code.
 - Local rerun at 2026-05-27 02:18 UTC completed `bash scripts/reproduce.sh`, `bash scripts/evaluate.sh`, and `python validate.py --compare` successfully with both scored experiments.
 - Scheduler CPU test job `aff60dc0-5e4` completed successfully inside the container at 2026-05-27 02:23 UTC. It ran `bash scripts/run.sh`, wrote the two-experiment `scoring/scores.json`, and passed `python validate.py --compare`.
+- Tightened the simulator on 2026-05-27 02:53 UTC so outgoing Gaussians are carried with a `valid` bit from the rasterization-like visibility update and deleted in the next merge step, matching the paper's deferred deletion flow more closely than the earlier current-membership oracle.
+- Extended the official evaluator to report adjacent-pair, sampled-pair, and deferred-update MB metrics in `scoring/scores.json`, then reran `bash scripts/reproduce.sh`, `bash scripts/evaluate_train.sh`, `bash scripts/evaluate_test.sh`, and `python validate.py --compare` locally.
 
 ## Results
 
 - Paper QHD memory result: GSCore 104.6 GB for 60 frames, Neo 19.6 GB, 81.3% reduction.
-- Scaled synthetic benchmark result after consistent post-seed accounting: full sort 33.1776 MB, Neo reuse-and-update 14.6131 MB, 55.9549% reduction.
-- Deferred-depth ablation result: no-deferred Neo uses 21.2486 MB, while full Neo uses 14.6131 MB, a 31.2280% traffic saving from the deferred depth update path on the scaled workload.
-- Ordering constraints recomputed independently from predicted per-tile orders: broad pair-order accuracy 1.0, mean absolute rank error 1.6865, p99 rank error 6.3502.
-- Per-regime diagnostics in `scoring/per_regime_scores.json`: high-retention 57.60% traffic reduction, moderate-retention 56.39%, rapid-motion 54.01%; all preserve pair-order accuracy 1.0.
+- Scaled synthetic benchmark result after valid-bit deletion: full sort 33.1776 MB, Neo reuse-and-update 16.3131 MB, 50.8310% reduction.
+- Deferred-depth ablation result: no-deferred Neo uses 22.9486 MB, while full Neo uses 16.3131 MB, a 28.9147% traffic saving from the deferred depth update path on the scaled workload.
+- Ordering constraints recomputed independently from predicted per-tile orders: pair-order accuracy 0.9091, adjacent-pair accuracy 0.6580, sampled-pair accuracy 0.9636, mean absolute rank error 1.6862, p99 rank error 6.3403.
+- Per-regime diagnostics in `scoring/per_regime_scores.json`: high-retention 54.55% traffic reduction, moderate-retention 51.82%, rapid-motion 46.42%; sampled-pair accuracy remains above 0.936 in all regimes.
 - The same results were reproduced by the completed scheduler job.
 
 ## Remaining

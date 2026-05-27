@@ -41,10 +41,11 @@ def dynamic_partial_sort(table: list[dict], frame_idx: int, chunk_size: int) -> 
     return result, accessed
 
 
-def merge_insert_delete(reused: list[dict], current: list[dict], incoming: list[dict]) -> tuple[list[dict], int]:
-    current_ids = {row["id"] for row in current}
+def merge_insert_delete(reused: list[dict], incoming: list[dict]) -> tuple[list[dict], int]:
     incoming_sorted = sorted((dict(row) for row in incoming), key=lambda row: row["depth"])
-    valid_reused = [row for row in reused if row["id"] in current_ids]
+    # Paper's MSU+ removes outgoing Gaussians whose valid bits were cleared by
+    # the previous frame's rasterization, avoiding an immediate shift pass.
+    valid_reused = [row for row in reused if row.get("valid", True)]
 
     merged = []
     i = 0
@@ -62,9 +63,22 @@ def merge_insert_delete(reused: list[dict], current: list[dict], incoming: list[
     return merged, merge_accesses
 
 
-def update_depths_after_rasterization(table: list[dict], current: list[dict]) -> list[dict]:
+def update_depths_after_rasterization(table: list[dict], current: list[dict]) -> tuple[list[dict], list[dict]]:
     current_depth = {row["id"]: row["depth"] for row in current}
-    return [{"id": row["id"], "depth": current_depth[row["id"]]} for row in table if row["id"] in current_depth]
+    rasterized = []
+    next_table = []
+    for row in table:
+        row_id = row["id"]
+        is_visible = row_id in current_depth
+        updated = {
+            "id": row_id,
+            "depth": current_depth[row_id] if is_visible else row["depth"],
+            "valid": is_visible,
+        }
+        next_table.append(updated)
+        if is_visible:
+            rasterized.append(updated)
+    return next_table, rasterized
 
 
 def rank_error_metrics(predicted: list[dict], ideal: list[dict]) -> dict:
@@ -114,7 +128,10 @@ def run_scene(
             # Seed the reusable table with exact sorted order. Traffic accounting
             # starts from frame 1 so Neo and full-sort baseline compare the same
             # temporal update interval.
-            previous_table = [sorted((dict(row) for row in tile), key=lambda row: row["depth"]) for tile in tiles]
+            previous_table = [
+                [dict(row, valid=True) for row in sorted(tile, key=lambda row: row["depth"])]
+                for tile in tiles
+            ]
             continue
 
         assert previous_table is not None
@@ -122,25 +139,26 @@ def run_scene(
         tile_outputs = []
         for tile_idx, current_tile in enumerate(tiles):
             prev_tile = previous_table[tile_idx]
-            prev_ids = {row["id"] for row in prev_tile}
+            prev_ids = {row["id"] for row in prev_tile if row.get("valid", True)}
             incoming = [row for row in current_tile if row["id"] not in prev_ids]
             reordered, partial_accesses = dynamic_partial_sort(prev_tile, frame_idx, chunk_size)
-            merged, merge_accesses = merge_insert_delete(reordered, current_tile, incoming)
+            merged, merge_accesses = merge_insert_delete(reordered, incoming)
             tile_accesses = 2 * partial_accesses + merge_accesses + 2 * len(incoming)
+            next_tile, rasterized = update_depths_after_rasterization(merged, current_tile)
             if separate_depth_refresh:
                 # Ablation for removing Neo's deferred depth update: after
                 # rasterization the table must be refreshed by a separate read
                 # of current depths and a writeback of table entries.
-                tile_accesses += 2 * len(merged)
+                tile_accesses += 2 * len(rasterized)
             neo_accesses += tile_accesses
             tile_outputs.append(
                 {
                     "tile": tile_idx,
-                    "predicted_order": [row["id"] for row in merged],
+                    "predicted_order": [row["id"] for row in rasterized],
                     "traffic_entries": tile_accesses,
                 }
             )
-            new_previous.append(update_depths_after_rasterization(merged, current_tile))
+            new_previous.append(next_tile)
         previous_table = new_previous
         frame_outputs.append({"frame": frame_idx, "tiles": tile_outputs})
 
