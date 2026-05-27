@@ -12,7 +12,7 @@ Candidates must write an artifact compatible with `eval/evaluate_sorting.py` und
 
 Candidates must report per-tile table-entry traffic using the same 8-byte Gaussian entry convention and must include all table reads/writes needed by their sorting strategy. Omitting insertion, deletion, or metadata update traffic is not allowed. Traffic is counted for frames 1 onward so all methods compare the same temporal update interval after the initial sorted table is seeded.
 
-For the `deferred_depth_update_ablation` experiment, candidates must provide both the normal output artifact and an artifact that disables deferred depth update and charges a separate current-depth read plus table writeback pass. This is required so the evaluator can measure the constraint side of the paper's component claim: traffic savings must come from removing the extra refresh pass, not from changing the workload or ignoring its memory traffic.
+For the `deferred_depth_update_ablation` experiment, candidates must provide both the normal output artifact and a paired artifact that charges a separate current-depth read plus table writeback pass. This is required so the evaluator can measure the constraint side of the component claim: traffic savings must come from removing the extra refresh pass, not from changing the workload or ignoring its memory traffic.
 
 ## Compliance Checklist
 
@@ -20,4 +20,4 @@ For the `deferred_depth_update_ablation` experiment, candidates must provide bot
 - [ ] Writes compatible artifacts under `outputs/` with per-tile predicted orders
 - [ ] Does not modify `eval/` to import or call candidate method code
 - [ ] Counts all required table-entry reads and writes in `traffic_MB`
-- [ ] Provides the no-deferred-depth artifact when reporting `deferred_depth_update_ablation`
+- [ ] Provides the paired extra-refresh artifact when reporting `deferred_depth_update_ablation`

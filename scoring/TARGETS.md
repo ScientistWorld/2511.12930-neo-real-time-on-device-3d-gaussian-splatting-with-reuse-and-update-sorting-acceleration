@@ -20,6 +20,6 @@ Tests worst-case rank displacement under temporal motion.
 
 ## Secondary: deferred_depth_update_ablation
 
-Tests the paper's claim that deferred depth update avoids a separate depth-refresh pass after sorting/rasterization.
+Tests whether a candidate avoids an extra table-refresh pass without changing the workload or degrading ordering quality.
 - **Metric**: `deferred_update_savings_pct` (higher is better)
 - **Run**: `bash scripts/reproduce.sh`

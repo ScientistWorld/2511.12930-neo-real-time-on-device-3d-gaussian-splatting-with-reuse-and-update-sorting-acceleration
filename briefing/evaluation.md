@@ -8,8 +8,8 @@ The benchmark measures memory traffic and ordering quality over a deterministic 
 
 ## Baselines and Targets
 
-The baseline is full sorting of each tile at each frame, which has perfect ordering but high memory traffic. The paper reports QHD traffic for 60 frames of 104.6 GB for GSCore and 19.6 GB for Neo, an 81.3% reduction, while quality degradation remains under 0.1 dB PSNR and 0.001 LPIPS. This reproduction uses an ordering-quality proxy instead of image PSNR because trained 3DGS scene checkpoints are not released.
+The baseline is full sorting of each tile at each frame, which has perfect ordering but high memory traffic. The paper reports QHD traffic for 60 frames of 104.6 GB for the full-sort hardware baseline and 19.6 GB for the proposed system, an 81.3% reduction, while quality degradation remains under 0.1 dB PSNR and 0.001 LPIPS. This reproduction uses an ordering-quality proxy instead of image PSNR because trained 3DGS scene checkpoints are not released.
 
 ## Evaluation Protocol
 
-Run `bash scripts/reproduce.sh` to generate the deterministic workload, run the full-sort baseline, run the candidate method, run the no-deferred-depth ablation, and write `scoring/scores.json`. Evaluation code in `eval/` reads per-tile predicted-order artifacts under `outputs/`, recomputes ordering quality against the workload, and must not import candidate method code. Workload generation uses a fixed seed and three temporal settings: high-retention, moderate-retention, and rapid-motion.
+Run `bash scripts/reproduce.sh` to generate the deterministic workload, produce the full-sort baseline artifact, produce candidate artifacts, and write `scoring/scores.json`. Evaluation code in `eval/` reads per-tile predicted-order artifacts under `outputs/`, recomputes ordering quality against the workload, and must not import candidate method code. Workload generation uses a fixed seed and three temporal settings: high-retention, moderate-retention, and rapid-motion.

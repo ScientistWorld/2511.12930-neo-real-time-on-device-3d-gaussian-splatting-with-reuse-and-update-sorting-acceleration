@@ -12,11 +12,11 @@
           "p99_abs_rank_error": 0.0
         },
         "neo_reuse_update": {
+          "traffic_reduction_pct": 50.83101851851852,
           "pair_order_accuracy": 0.9091211185569253,
           "adjacent_pair_accuracy": 0.6579828642867862,
           "sampled_pair_order_accuracy": 0.9636473773981901,
           "traffic_MB": 16.313088,
-          "traffic_reduction_pct": 50.83101851851852,
           "mean_abs_rank_error": 1.686226851851852,
           "p99_abs_rank_error": 6.340277777777778
         }
@@ -36,22 +36,22 @@
           "deferred_update_savings_MB": 0.0
         },
         "neo_no_deferred_depth_update": {
+          "traffic_reduction_pct": 30.831018518518515,
           "pair_order_accuracy": 0.9091211185569253,
           "adjacent_pair_accuracy": 0.6579828642867862,
           "sampled_pair_order_accuracy": 0.9636473773981901,
           "traffic_MB": 22.948608,
-          "traffic_reduction_pct": 30.831018518518515,
-          "deferred_update_savings_pct": 0.0,
-          "deferred_update_savings_MB": 0.0,
           "mean_abs_rank_error": 1.686226851851852,
-          "p99_abs_rank_error": 6.340277777777778
+          "p99_abs_rank_error": 6.340277777777778,
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
         },
         "neo_reuse_update": {
+          "traffic_reduction_pct": 50.83101851851852,
           "pair_order_accuracy": 0.9091211185569253,
           "adjacent_pair_accuracy": 0.6579828642867862,
           "sampled_pair_order_accuracy": 0.9636473773981901,
           "traffic_MB": 16.313088,
-          "traffic_reduction_pct": 50.83101851851852,
           "mean_abs_rank_error": 1.686226851851852,
           "p99_abs_rank_error": 6.340277777777778,
           "deferred_update_savings_pct": 28.914694956661425,

@@ -20,6 +20,7 @@
 - Scheduler CPU test job `aff60dc0-5e4` completed successfully inside the container at 2026-05-27 02:23 UTC. It ran `bash scripts/run.sh`, wrote the two-experiment `scoring/scores.json`, and passed `python validate.py --compare`.
 - Tightened the simulator on 2026-05-27 02:53 UTC so outgoing Gaussians are carried with a `valid` bit from the rasterization-like visibility update and deleted in the next merge step, matching the paper's deferred deletion flow more closely than the earlier current-membership oracle.
 - Extended the official evaluator to report adjacent-pair, sampled-pair, and deferred-update MB metrics in `scoring/scores.json`, then reran `bash scripts/reproduce.sh`, `bash scripts/evaluate_train.sh`, `bash scripts/evaluate_test.sh`, and `python validate.py --compare` locally.
+- Final verification on 2026-05-27 03:08 UTC made `scripts/evaluate.sh` discover generic candidate artifacts, tightened method-agnostic scoring documentation, adjusted the ablation primary metric to the scale-normalized savings percentage, and reran `bash scripts/reproduce.sh` plus `python validate.py --compare` successfully.
 
 ## Results
 

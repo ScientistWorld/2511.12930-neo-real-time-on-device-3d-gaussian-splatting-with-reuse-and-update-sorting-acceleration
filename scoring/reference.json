@@ -61,9 +61,9 @@
       }
     },
     "deferred_depth_update_ablation": {
-      "description": "Component ablation from the paper: sorting-engine-only reuse reduces traffic, and deferred depth update in the full Neo design removes an additional depth-refresh pass.",
+      "description": "Component ablation from the paper: one variant pays for an extra table refresh pass, while the complete proposed system avoids that traffic while preserving ordering quality.",
       "weight": 0.3,
-      "primary_metric": "pair_order_accuracy",
+      "primary_metric": "deferred_update_savings_pct",
       "metrics": {
         "traffic_reduction_pct": {
           "higher_is_better": true,
@@ -72,13 +72,13 @@
         },
         "deferred_update_savings_pct": {
           "higher_is_better": true,
-          "coefficient": 0.0,
-          "description": "Scale-normalized diagnostic: percentage traffic saved by avoiding the separate depth-refresh pass. Zero-weighted because the train/test split showed the ratio is invariant across slices."
+          "coefficient": 0.8,
+          "description": "Scale-normalized component benefit: percentage traffic saved by avoiding the extra table refresh pass."
         },
         "deferred_update_savings_MB": {
           "higher_is_better": true,
-          "coefficient": 1.0,
-          "description": "Primary component benefit metric: absolute traffic saved by avoiding the separate depth-refresh pass."
+          "coefficient": 0.0,
+          "description": "Diagnostic absolute traffic saved by avoiding the extra refresh pass. Zero-weighted so larger workloads are not rewarded by themselves."
         },
         "traffic_MB": {
           "higher_is_better": false,

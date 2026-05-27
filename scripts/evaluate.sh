@@ -15,8 +15,9 @@
 # This file is read by the system for automated comparison.
 #
 # Example usage:
-#   ./evaluate.sh <method_and_run_name>                             # evaluate with defaults
-#   ./evaluate.sh <method_and_run_name> checkpoints/epoch_10.pt     # evaluate a specific checkpoint
+#   ./evaluate.sh                                      # discover artifacts in outputs/
+#   ./evaluate.sh outputs/candidate.json               # evaluate one candidate plus baseline
+#   ./evaluate.sh outputs/candidate.json outputs/full_sort.json scoring/scores.json
 #
 # Called from run.sh after training, or independently.
 
@@ -28,11 +29,16 @@ cd "$REPO_ROOT"
 
 mkdir -p scoring
 
-NEO_OUTPUT="${1:-outputs/neo_reuse_update.json}"
-BASELINE_OUTPUT="${2:-outputs/full_sort.json}"
+METHOD_OUTPUT="${1:-}"
+BASELINE_OUTPUT="${2:-}"
 SCORES_OUTPUT="${3:-scoring/scores.json}"
 
-python eval/evaluate_sorting.py \
-  --neo "$NEO_OUTPUT" \
-  --baseline "$BASELINE_OUTPUT" \
-  --output "$SCORES_OUTPUT"
+ARGS=(--output "$SCORES_OUTPUT" --outputs-dir outputs)
+if [ -n "$METHOD_OUTPUT" ]; then
+  ARGS+=(--candidate "$METHOD_OUTPUT")
+fi
+if [ -n "$BASELINE_OUTPUT" ]; then
+  ARGS+=(--baseline "$BASELINE_OUTPUT")
+fi
+
+python eval/evaluate_sorting.py "${ARGS[@]}"

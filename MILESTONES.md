@@ -32,5 +32,10 @@
 - Extended `scoring/scores.json` with adjacent-pair, sampled-pair, and deferred-update MB metrics, then locally reran reproduction, train/test evaluation, and validation successfully.
 - Updated results remain at `core_claim_plus`: Neo reduces table traffic by 50.8310% on the scaled temporal workload and saves 28.9147% traffic versus the no-deferred-depth ablation while preserving broad ordering structure.
 
+### [2026-05-27 03:08] - core_claim_plus
+- Final verification kept the milestone at `core_claim_plus`.
+- Made the official evaluator reusable for generic candidate artifacts, tightened method-agnostic documentation, and adjusted the component-ablation scoring weight toward the scale-normalized savings percentage.
+- Reran `bash scripts/reproduce.sh` and `python validate.py --compare`; all validation checks passed.
+
 ## Stop Justification
 - Completed at milestone `core_claim_plus`.
