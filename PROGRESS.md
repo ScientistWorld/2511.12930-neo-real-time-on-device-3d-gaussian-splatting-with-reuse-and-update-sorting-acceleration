@@ -12,6 +12,7 @@
 - Local rerun at 2026-05-27 02:05 UTC again completed `bash scripts/reproduce.sh` and `python validate.py --compare` successfully.
 - Audit found that the old evaluator trusted method-reported summary metrics. This is fixed: artifacts now include per-frame, per-tile predicted orders and `eval/` recomputes ordering quality from the workload.
 - Local rerun at 2026-05-27 02:09 UTC completed `bash scripts/reproduce.sh` and `python validate.py --compare` successfully with the independent evaluator.
+- Scheduler CPU test job `597e7566-ff8` completed successfully inside the container with the independent evaluator and passed `python validate.py --compare`.
 
 ## Results
 
@@ -24,7 +25,7 @@
 ## Remaining
 
 - Higher milestones would require trained 3DGS scenes or a more detailed hardware/cycle simulator. The paper's RTL/cycle simulator and trained scene checkpoints were not released with the paper.
-- A submitted CPU test job is queued to revalidate the independent evaluator and packaged reproduction path in the compute container.
+- No further productive expansion is available without trained 3DGS scenes, the authors' simulator, or hardware RTL.
 
 ## Issues
 
