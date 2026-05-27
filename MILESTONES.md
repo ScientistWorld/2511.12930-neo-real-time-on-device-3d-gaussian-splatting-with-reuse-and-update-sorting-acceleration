@@ -42,5 +42,9 @@
 - Reran `bash scripts/reproduce.sh`, `bash scripts/evaluate_train.sh`, `bash scripts/evaluate_test.sh`, and `python validate.py --compare`; all validation checks passed.
 - Kept the milestone at `core_claim_plus` because the implementation reproduces the core traffic/order claim and an additional deferred-depth-update ablation on multiple synthetic temporal regimes, while full paper-scale rendering requires unreleased trained scenes and simulator/RTL artifacts.
 
+### [2026-05-27 03:14] - core_claim_plus
+- Final verifier tightened strict method-agnostic wording in `briefing/evaluation.md`, `scoring/EXPERIMENTS.md`, and `scoring/DIRECTION.md`.
+- Confirmed the milestone remains `core_claim_plus`; no scoring or implementation downgrade was found.
+
 ## Stop Justification
 - Completed at milestone `core_claim_plus`.

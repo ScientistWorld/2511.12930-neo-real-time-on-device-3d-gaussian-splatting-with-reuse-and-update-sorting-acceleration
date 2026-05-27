@@ -5,4 +5,4 @@ action: done
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "Final autonomy pass complete: audited Neo algorithm coverage, reran reproduce/train/test evaluation and validate.py --compare successfully, and documented the synthetic-workload limitation. Packaged reproduction remains at core_claim_plus."
+notes: "Final verification passed: method-agnostic docs tightened, reusable evaluation validated, and synthetic-trace limitation documented."

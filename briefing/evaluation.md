@@ -8,7 +8,7 @@ The benchmark measures memory traffic and ordering quality over a deterministic 
 
 ## Baselines and Targets
 
-The baseline is full sorting of each tile at each frame, which has perfect ordering but high memory traffic. The paper reports QHD traffic for 60 frames of 104.6 GB for the full-sort hardware baseline and 19.6 GB for the proposed system, an 81.3% reduction, while quality degradation remains under 0.1 dB PSNR and 0.001 LPIPS. This reproduction uses an ordering-quality proxy instead of image PSNR because trained 3DGS scene checkpoints are not released.
+The reference baseline is full sorting of each tile at each frame, which has perfect ordering but high memory traffic. The published QHD, 60-frame reference point reports 104.6 GB for full sorting and 19.6 GB for the target result, an 81.3% reduction, while image-quality changes remain under 0.1 dB PSNR and 0.001 LPIPS. This reproduction uses ordering-quality proxies instead of image PSNR because trained 3DGS scene checkpoints are not released.
 
 ## Evaluation Protocol
 
