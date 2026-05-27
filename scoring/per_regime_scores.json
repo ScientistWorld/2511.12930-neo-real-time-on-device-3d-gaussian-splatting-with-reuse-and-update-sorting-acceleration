@@ -1,0 +1,50 @@
+{
+  "experiments": {
+    "synthetic_temporal_sorting_per_regime": {
+      "results": {
+        "full_sort_family_like": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "traffic_MB": 9.8304,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0
+        },
+        "neo_reuse_update_family_like": {
+          "pair_order_accuracy": 1.0,
+          "traffic_MB": 4.16832,
+          "traffic_reduction_pct": 57.59765624999999,
+          "mean_abs_rank_error": 0.923388671875,
+          "p99_abs_rank_error": 4.066666666666666
+        },
+        "full_sort_rapid_motion": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "traffic_MB": 11.0592,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0
+        },
+        "neo_reuse_update_rapid_motion": {
+          "pair_order_accuracy": 1.0,
+          "traffic_MB": 5.08608,
+          "traffic_reduction_pct": 54.01041666666667,
+          "mean_abs_rank_error": 2.5050925925925926,
+          "p99_abs_rank_error": 8.745833333333334
+        },
+        "full_sort_train_like": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "traffic_MB": 12.288,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0
+        },
+        "neo_reuse_update_train_like": {
+          "pair_order_accuracy": 1.0,
+          "traffic_MB": 5.35872,
+          "traffic_reduction_pct": 56.39062500000001,
+          "mean_abs_rank_error": 1.560234375,
+          "p99_abs_rank_error": 6.020833333333333
+        }
+      }
+    }
+  }
+}

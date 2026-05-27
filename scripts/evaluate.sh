@@ -26,7 +26,11 @@ cd /home/user
 
 mkdir -p scoring
 
+NEO_OUTPUT="${1:-outputs/neo_reuse_update.json}"
+BASELINE_OUTPUT="${2:-outputs/full_sort.json}"
+SCORES_OUTPUT="${3:-scoring/scores.json}"
+
 python eval/evaluate_sorting.py \
-  --neo outputs/neo_reuse_update.json \
-  --baseline outputs/full_sort.json \
-  --output scoring/scores.json
+  --neo "$NEO_OUTPUT" \
+  --baseline "$BASELINE_OUTPUT" \
+  --output "$SCORES_OUTPUT"

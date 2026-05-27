@@ -11,10 +11,10 @@
         },
         "neo_reuse_update": {
           "pair_order_accuracy": 1.0,
-          "traffic_MB": 15.055488,
-          "traffic_reduction_pct": 54.62152777777778,
-          "mean_abs_rank_error": 1.6629052131558644,
-          "p99_abs_rank_error": 6.277777777777778
+          "traffic_MB": 14.613119999999999,
+          "traffic_reduction_pct": 55.95486111111112,
+          "mean_abs_rank_error": 1.6864920910493828,
+          "p99_abs_rank_error": 6.350154320987654
         }
       }
     }

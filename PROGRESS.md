@@ -10,18 +10,21 @@
 - `bash scripts/reproduce.sh` completed locally and `python validate.py --compare` passed.
 - Scheduler CPU test job `a5d0ec7a-e50` completed successfully inside the container and passed validation.
 - Local rerun at 2026-05-27 02:05 UTC again completed `bash scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Audit found that the old evaluator trusted method-reported summary metrics. This is fixed: artifacts now include per-frame, per-tile predicted orders and `eval/` recomputes ordering quality from the workload.
+- Local rerun at 2026-05-27 02:09 UTC completed `bash scripts/reproduce.sh` and `python validate.py --compare` successfully with the independent evaluator.
 
 ## Results
 
 - Paper QHD memory result: GSCore 104.6 GB for 60 frames, Neo 19.6 GB, 81.3% reduction.
-- Scaled synthetic benchmark result: full sort 33.1776 MB, Neo reuse-and-update 15.0555 MB, 54.6215% reduction.
-- Ordering constraints on the scaled benchmark: broad pair-order accuracy 1.0, mean absolute rank error 1.6629, p99 rank error 6.2778.
+- Scaled synthetic benchmark result after consistent post-seed accounting: full sort 33.1776 MB, Neo reuse-and-update 14.6131 MB, 55.9549% reduction.
+- Ordering constraints recomputed independently from predicted per-tile orders: broad pair-order accuracy 1.0, mean absolute rank error 1.6865, p99 rank error 6.3502.
+- Per-regime diagnostics in `scoring/per_regime_scores.json`: high-retention 57.60% traffic reduction, moderate-retention 56.39%, rapid-motion 54.01%; all preserve pair-order accuracy 1.0.
 - The same results were reproduced by the completed scheduler job.
 
 ## Remaining
 
 - Higher milestones would require trained 3DGS scenes or a more detailed hardware/cycle simulator. The paper's RTL/cycle simulator and trained scene checkpoints were not released with the paper.
-- A submitted CPU test job is queued to revalidate the packaged reproduction path in the compute container.
+- A submitted CPU test job is queued to revalidate the independent evaluator and packaged reproduction path in the compute container.
 
 ## Issues
 

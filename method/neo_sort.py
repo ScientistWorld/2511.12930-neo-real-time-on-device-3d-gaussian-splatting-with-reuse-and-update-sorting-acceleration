@@ -101,54 +101,45 @@ def rank_error_metrics(predicted: list[dict], ideal: list[dict]) -> dict:
 
 def run_scene(scene_name: str, frames: list, chunk_size: int) -> dict:
     previous_table: list[list[dict]] | None = None
-    frame_summaries = []
-    total_entries = 0
+    frame_outputs = []
     neo_accesses = 0
-    ideal_sort_accesses = 0
-    weighted_pair_accuracy = 0.0
-    weighted_mean_rank = 0.0
-    weighted_p99_rank = 0.0
 
     for frame_idx, tiles in enumerate(frames):
         if frame_idx == 0:
-            previous_table = [[dict(row) for row in tile] for tile in tiles]
-            frame_entries = sum(len(tile) for tile in tiles)
-            # Initial frame needs conventional sorting to seed the reusable table.
-            neo_accesses += frame_entries * 2
-            ideal_sort_accesses += frame_entries * 10
+            # Seed the reusable table with exact sorted order. Traffic accounting
+            # starts from frame 1 so Neo and full-sort baseline compare the same
+            # temporal update interval.
+            previous_table = [sorted((dict(row) for row in tile), key=lambda row: row["depth"]) for tile in tiles]
             continue
 
         assert previous_table is not None
         new_previous = []
+        tile_outputs = []
         for tile_idx, current_tile in enumerate(tiles):
             prev_tile = previous_table[tile_idx]
             prev_ids = {row["id"] for row in prev_tile}
             incoming = [row for row in current_tile if row["id"] not in prev_ids]
             reordered, partial_accesses = dynamic_partial_sort(prev_tile, frame_idx, chunk_size)
             merged, merge_accesses = merge_insert_delete(reordered, current_tile, incoming)
-            ideal = sorted(current_tile, key=lambda row: row["depth"])
-            metrics = rank_error_metrics(merged, ideal)
-            entries = len(current_tile)
-            total_entries += entries
-            weighted_pair_accuracy += metrics["pair_order_accuracy"] * entries
-            weighted_mean_rank += metrics["mean_abs_rank_error"] * entries
-            weighted_p99_rank += metrics["p99_abs_rank_error"] * entries
-            neo_accesses += 2 * partial_accesses + merge_accesses + 2 * len(incoming)
-            ideal_sort_accesses += entries * 10
+            tile_accesses = 2 * partial_accesses + merge_accesses + 2 * len(incoming)
+            neo_accesses += tile_accesses
+            tile_outputs.append(
+                {
+                    "tile": tile_idx,
+                    "predicted_order": [row["id"] for row in merged],
+                    "traffic_entries": tile_accesses,
+                }
+            )
             new_previous.append(update_depths_after_rasterization(merged, current_tile))
         previous_table = new_previous
-        frame_summaries.append({"frame": frame_idx, "tiles": len(tiles)})
+        frame_outputs.append({"frame": frame_idx, "tiles": tile_outputs})
 
-    denom = max(total_entries, 1)
     return {
         "scene": scene_name,
-        "frames_evaluated": len(frame_summaries),
-        "pair_order_accuracy": weighted_pair_accuracy / denom,
-        "mean_abs_rank_error": weighted_mean_rank / denom,
-        "p99_abs_rank_error": weighted_p99_rank / denom,
+        "frames_evaluated": len(frame_outputs),
         "traffic_entries": neo_accesses,
         "traffic_MB": neo_accesses * ENTRY_BYTES / 1_000_000,
-        "ideal_sort_traffic_entries": ideal_sort_accesses,
+        "frames": frame_outputs,
     }
 
 

@@ -16,22 +16,31 @@ def run(workload_path: Path, output_path: Path) -> None:
     for scene_name, scene in workload["scenes"].items():
         traffic_entries = 0
         entries = 0
-        for frame in scene["frames"][1:]:
-            for tile in frame:
-                sorted(tile, key=lambda row: row["depth"])
+        frame_outputs = []
+        for frame_idx, frame in enumerate(scene["frames"][1:], start=1):
+            tile_outputs = []
+            for tile_idx, tile in enumerate(frame):
+                sorted_tile = sorted(tile, key=lambda row: row["depth"])
                 entries += len(tile)
                 # Approximate multi-pass global sorting traffic in entries.
-                traffic_entries += len(tile) * 10
+                tile_accesses = len(tile) * 10
+                traffic_entries += tile_accesses
+                tile_outputs.append(
+                    {
+                        "tile": tile_idx,
+                        "predicted_order": [row["id"] for row in sorted_tile],
+                        "traffic_entries": tile_accesses,
+                    }
+                )
+            frame_outputs.append({"frame": frame_idx, "tiles": tile_outputs})
         scenes.append(
             {
                 "scene": scene_name,
                 "frames_evaluated": max(0, len(scene["frames"]) - 1),
-                "pair_order_accuracy": 1.0,
-                "mean_abs_rank_error": 0.0,
-                "p99_abs_rank_error": 0.0,
                 "traffic_entries": traffic_entries,
                 "traffic_MB": traffic_entries * ENTRY_BYTES / 1_000_000,
                 "entries_sorted": entries,
+                "frames": frame_outputs,
             }
         )
     output = {"method": "full_sort", "workload": str(workload_path), "scenes": scenes}

@@ -4,5 +4,5 @@
 action: submit
 gpus: 0
 test: true
-milestone: core_claim
-notes: "CPU test job to rerun scripts/reproduce.sh and validate.py --compare for the packaged Neo reuse-and-update sorting reproduction."
+milestone: core_claim_plus
+notes: "CPU test job to verify the independent evaluator, per-tile prediction artifacts, and per-regime diagnostics for Neo reuse-and-update sorting."
