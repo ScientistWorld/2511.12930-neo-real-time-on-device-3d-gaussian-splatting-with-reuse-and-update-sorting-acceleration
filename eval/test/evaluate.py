@@ -101,11 +101,13 @@ def _rank_error_metrics(predicted_ids: list[int], ideal_tile: list[dict]) -> dic
 
     sampled_correct = 0
     sampled_total = 0
-    sample_indices = sorted(set(range(0, len(predicted_ids), max(len(predicted_ids) // 32, 1))) | {len(predicted_ids) - 1})
-    for left_pos, left_idx in enumerate(sample_indices):
-        for right_idx in sample_indices[left_pos + 1:]:
+    sample_step = max(len(predicted_ids) // 64, 1)
+    for offset in (1, 2, 4, 8, 16, 32, 64, 128):
+        if offset >= len(predicted_ids):
+            continue
+        for idx in range(0, len(predicted_ids) - offset, sample_step):
             sampled_total += 1
-            if ideal_rank[predicted_ids[left_idx]] <= ideal_rank[predicted_ids[right_idx]]:
+            if ideal_rank[predicted_ids[idx]] <= ideal_rank[predicted_ids[idx + offset]]:
                 sampled_correct += 1
     return {
         "mean_abs_rank_error": mean_error,

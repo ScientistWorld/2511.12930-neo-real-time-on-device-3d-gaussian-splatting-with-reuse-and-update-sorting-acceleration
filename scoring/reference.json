@@ -17,8 +17,8 @@
         },
         "pair_order_accuracy": {
           "higher_is_better": true,
-          "coefficient": 0.45,
-          "description": "Sparse long-range order preservation metric over deterministic within-tile pair probes."
+          "coefficient": 0.0,
+          "description": "Sparse long-range order preservation metric over deterministic within-tile pair probes. Kept as a zero-weight diagnostic because the first split run showed it saturated on current artifacts."
         },
         "adjacent_pair_accuracy": {
           "higher_is_better": true,
@@ -28,7 +28,7 @@
         "sampled_pair_order_accuracy": {
           "higher_is_better": true,
           "coefficient": 0.35,
-          "description": "Deterministic sampled Kendall-style order metric that broadens pair coverage without all-pairs cost."
+          "description": "Deterministic multi-scale pair-order metric over local and long-range offsets, designed to catch both adjacent and broader ordering shortcuts without all-pairs cost."
         },
         "mean_abs_rank_error": {
           "higher_is_better": false,
@@ -82,8 +82,8 @@
         },
         "pair_order_accuracy": {
           "higher_is_better": true,
-          "coefficient": 0.35,
-          "description": "Sparse long-range order preservation metric for ablation outputs."
+          "coefficient": 0.0,
+          "description": "Sparse long-range order preservation metric for ablation outputs. Kept as a zero-weight diagnostic because the first split run showed it saturated on current artifacts."
         },
         "adjacent_pair_accuracy": {
           "higher_is_better": true,
@@ -93,7 +93,7 @@
         "sampled_pair_order_accuracy": {
           "higher_is_better": true,
           "coefficient": 0.25,
-          "description": "Deterministic sampled Kendall-style order metric for ablation outputs."
+          "description": "Deterministic multi-scale pair-order metric over local and long-range offsets, designed to catch both adjacent and broader ordering shortcuts without all-pairs cost."
         },
         "mean_abs_rank_error": {
           "higher_is_better": false,

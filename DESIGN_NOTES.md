@@ -27,3 +27,4 @@
 ## Runner Iteration Notes
 
 - First scoring job produced `scoring/scores_train.json` and then failed in the held-out evaluator because the test split included frame 0, while all artifacts begin at update frame 1. Adjusted `eval/test/evaluate.py` so the held-out slice remains disjoint but only scores update frames (`frame_idx > 0 and frame_idx % 4 in {0, 3}`).
+- Second scoring job completed. The produced train/test files had useful traffic, adjacent-order, and rank-error signal, but the sparse `pair_order_accuracy` and original sampled pair metric were saturated at 1.0 for every method on both slices. Revised `sampled_pair_order_accuracy` into a deterministic multi-scale local/long-range pair probe and set the saturated sparse pair metric to zero weight in `scoring/reference.json`.
