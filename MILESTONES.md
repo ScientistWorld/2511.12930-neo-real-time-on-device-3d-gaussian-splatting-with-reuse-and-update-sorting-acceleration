@@ -28,5 +28,4 @@
 - The job reran `bash scripts/run.sh` and passed `python validate.py --compare` with both `synthetic_temporal_sorting` and `deferred_depth_update_ablation` present in `scoring/scores.json`.
 
 ## Stop Justification
-- Completed at milestone `core_claim_plus`. The environment now validates Neo's core traffic/order tradeoff on multiple synthetic temporal regimes plus the deferred-depth-update component ablation.
-- Higher milestones would require unreleased trained 3DGS scene checkpoints, the authors' cycle simulator or RTL, and full image rendering/quality evaluation.
+- Completed at milestone `core_claim_plus`.
