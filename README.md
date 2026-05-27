@@ -129,4 +129,7 @@ Run `bash scripts/reproduce.sh` to generate the deterministic workload, run the 
 
 # Reproduction Milestones
 
-**Current: core_claim_plus**
+**Current: core_claim**
+
+## Stop Justification
+- Completed at milestone `core_claim`.
