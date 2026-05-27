@@ -19,4 +19,4 @@
 - Reuse-and-update sorting reduced table traffic by 54.62% versus full sorting while preserving broad pair order and keeping p99 rank error at 6.28 positions.
 
 ## Stop Justification
-- Completed at milestone `core_claim`. The paper's actual reuse-and-update sorting algorithm is implemented and validated on a scaled temporal 3DGS sorting benchmark.
+- Completed at milestone `core_claim`.

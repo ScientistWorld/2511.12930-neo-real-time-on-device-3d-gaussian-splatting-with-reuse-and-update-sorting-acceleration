@@ -1,26 +1,108 @@
+# Overview
+
+- **Paper ID:** 2511.12930
+- **Title:** Neo: Real-Time On-Device 3D Gaussian Splatting with Reuse-and-Update Sorting Acceleration
+- **Domain:** Computer Architecture / Neural Rendering Acceleration
+- **TL;DR:** Neo accelerates on-device 3D Gaussian Splatting by reusing and incrementally updating per-tile Gaussian depth order across frames.
+
+## Short Summary
+
+The paper identifies sorting as the dominant memory-bandwidth bottleneck for high-resolution 3DGS rendering on edge devices. Neo exploits temporal similarity across consecutive camera poses by updating prior sorted Gaussian tables instead of fully sorting every frame. The paper couples this algorithm with a specialized sorting/rasterization accelerator and reports large throughput and DRAM-traffic improvements with negligible image-quality loss.
+
+## Key Results
+
+- QHD DRAM traffic for 60 frames drops from 104.6 GB on GSCore to 19.6 GB on Neo.
+- Neo reports 99.3 FPS average QHD throughput and 5.6x speedup over GSCore.
+- Rendering quality changes by at most 0.1 dB PSNR and 0.001 LPIPS across six scenes.
+
+---
+
 # Problem Definition
-
-What problem does this paper address? Write this so that someone with no knowledge of the paper can understand what needs to be solved and how success is measured.
-
-Do NOT describe the paper's method or solution here — only the problem itself. Think about if a future scientist agent try to solve this problem from scratch without knowing what approach the paper took. If you leak the solution, you compromise the benchmark.
 
 ## Research Question
 
-<!-- What problem or challenge does this paper tackle? What gap in existing work does it address? -->
+How can an on-device 3D Gaussian Splatting renderer maintain correct per-tile depth ordering across a sequence of camera poses while greatly reducing the memory traffic normally caused by sorting every tile from scratch for every frame?
 
 ## Why It Matters
 
-<!-- Why is this problem important? What would a good solution enable? Make it short -->
+High-resolution AR/VR rendering needs low latency and high frame rate on memory-constrained devices. In 3DGS, depth sorting can dominate off-chip traffic, so reducing sorting traffic without corrupting visual order is necessary for practical on-device rendering.
 
 ## Success Criteria
 
-<!-- What would a successful solution look like? What properties should it have? This is about the goal, not the paper's specific approach. Make it short -->
+A successful solution should process temporally adjacent per-tile Gaussian tables, reduce sorting-related traffic relative to full per-frame sorting, and preserve near-correct depth order so rendering quality is not meaningfully degraded.
+
+---
+
+# Paper's Method
+
+## Key Contribution
+
+Neo introduces reuse-and-update sorting for 3D Gaussian Splatting and pairs it with hardware support for low-traffic on-device rendering. The core software-visible contribution is to carry forward each tile's sorted Gaussian table from the previous frame and update it incrementally instead of globally sorting from scratch.
+
+## Approach
+
+For each frame and tile, Neo performs four operations. First, it reorders the previous Gaussian table with Dynamic Partial Sorting: entries are sorted in chunks of up to 256 Gaussians, and chunk boundaries alternate by half a chunk across frames so entries can migrate across prior boundaries. Second, newly visible Gaussians are sorted and inserted. Third, outgoing Gaussians are deleted during the merge. Fourth, depth values are refreshed during rasterization so the next frame can reuse the updated table without an extra random depth-fetch pass.
+
+The hardware design contains preprocessing, sorting, and rasterization engines. The sorting engine includes bitonic sorting and merge units for chunk sorting, insertion, and deletion; the rasterization engine supports subtile rasterization and on-the-fly depth/valid-bit update.
+
+## Main Claims
+
+The primary claim is that temporal reuse of sorted Gaussian tables greatly reduces sorting-induced memory traffic while preserving rendering quality. The paper reports 81.3% lower QHD DRAM traffic than GSCore and 94.4% lower than Orin AGX for 60 frames, with less than 0.1 dB PSNR and 0.001 LPIPS degradation.
+
+Secondary claims include higher end-to-end throughput than Orin AGX and GSCore, robustness to larger scenes and rapid camera movement, and small hardware area/power overhead.
+
+---
+
+# Evaluation
+
+## Metrics
+
+The benchmark measures memory traffic and ordering quality over a deterministic temporal sequence of per-tile Gaussian tables.
+
+`traffic_MB` estimates table-entry memory traffic; lower is better. `traffic_reduction_pct` compares a candidate against full per-frame sorting; higher is better. `pair_order_accuracy` is the fraction of adjacent output pairs that match the exact depth-sorted order; higher is better. `mean_abs_rank_error` and `p99_abs_rank_error` measure displacement from exact depth rank; lower is better.
+
+## Baselines and Targets
+
+The baseline is full sorting of each tile at each frame, which has perfect ordering but high memory traffic. The paper reports QHD traffic for 60 frames of 104.6 GB for GSCore and 19.6 GB for Neo, an 81.3% reduction, while quality degradation remains under 0.1 dB PSNR and 0.001 LPIPS. This reproduction uses an ordering-quality proxy instead of image PSNR because trained 3DGS scene checkpoints are not released.
+
+## Evaluation Protocol
+
+Run `bash scripts/reproduce.sh` to generate the deterministic workload, run the full-sort baseline, run the candidate method, and write `scoring/scores.json`. Evaluation code in `eval/` reads only output artifacts under `outputs/` and must not import candidate method code. Workload generation uses a fixed seed and three temporal settings: high-retention, moderate-retention, and rapid-motion.
+
+---
+
+# Reproduction Log
+
+### Iteration 1: gpt-5.5
+- **Milestone**: `core_claim` | **Status**: done
+- **Working time**: 8m | **GPU**: 0.0h
+- **Jobs**: 1 total (1 completed, 0 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-05-27 02:20] - none
+- Started reproduction of Neo from paper markdown.
+- Identified the core reproducible algorithm: reuse-and-update sorting for per-tile 3DGS Gaussian tables.
+
+### [2026-05-27 02:55] - method_runs
+- Implemented Dynamic Partial Sorting with alternating half-chunk boundaries, insertion, deletion, and deferred depth refresh in `method/neo_sort.py`.
+- Implemented full per-frame sorting baseline and method-agnostic evaluator.
+- Local CPU reproduction runs end-to-end and writes `scoring/scores.json`.
+
+### [2026-05-27 03:05] - core_claim
+- Scheduler CPU test job `a5d0ec7a-e50` completed with exit code 0.
+- Container run reproduced the benchmark and `python validate.py --compare` passed.
+- Reuse-and-update sorting reduced table traffic by 54.62% versus full sorting while preserving broad pair order and keeping p99 rank error at 6.28 positions.
+
+</details>
+
 
 ---
 
 # Reproduction Milestones
 
-**Current: none**
+**Current: core_claim**
 
 ## Stop Justification
-- Completed at milestone `none`.
+- Completed at milestone `core_claim`.
