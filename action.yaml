@@ -6,4 +6,4 @@ action: done
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "Frame-parity update split; 41 train metric values, 41 test metric values; Neo train/test close on traffic reduction (55.95/55.95) and ordering (pair 0.9094/0.9089), with deferred savings MB 3.539/3.097; deferred savings percent retained only as zero-weight diagnostic."
+notes: "Frame-parity update split; 41 train metric values, 41 test metric values; Neo train/test close on traffic reduction (55.95/55.95) and ordering (pair 0.9094/0.9089), deferred savings MB 3.539/3.097 remains active; ablation primary marker uses scale-free pair accuracy for paper consistency."
