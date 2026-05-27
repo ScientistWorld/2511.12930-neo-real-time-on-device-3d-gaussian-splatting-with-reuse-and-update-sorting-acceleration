@@ -37,5 +37,10 @@
 - Made the official evaluator reusable for generic candidate artifacts, tightened method-agnostic documentation, and adjusted the component-ablation scoring weight toward the scale-normalized savings percentage.
 - Reran `bash scripts/reproduce.sh` and `python validate.py --compare`; all validation checks passed.
 
+### [2026-05-27 03:12] - core_claim_plus
+- Ran a final autonomous audit against the paper's algorithmic requirements, including Dynamic Partial Sorting, interleaved boundaries, incoming insertion, valid-bit deletion, and deferred depth update.
+- Reran `bash scripts/reproduce.sh`, `bash scripts/evaluate_train.sh`, `bash scripts/evaluate_test.sh`, and `python validate.py --compare`; all validation checks passed.
+- Kept the milestone at `core_claim_plus` because the implementation reproduces the core traffic/order claim and an additional deferred-depth-update ablation on multiple synthetic temporal regimes, while full paper-scale rendering requires unreleased trained scenes and simulator/RTL artifacts.
+
 ## Stop Justification
 - Completed at milestone `core_claim_plus`.

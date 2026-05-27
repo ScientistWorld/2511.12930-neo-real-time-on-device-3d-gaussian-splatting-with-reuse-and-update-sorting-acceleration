@@ -21,6 +21,7 @@
 - Tightened the simulator on 2026-05-27 02:53 UTC so outgoing Gaussians are carried with a `valid` bit from the rasterization-like visibility update and deleted in the next merge step, matching the paper's deferred deletion flow more closely than the earlier current-membership oracle.
 - Extended the official evaluator to report adjacent-pair, sampled-pair, and deferred-update MB metrics in `scoring/scores.json`, then reran `bash scripts/reproduce.sh`, `bash scripts/evaluate_train.sh`, `bash scripts/evaluate_test.sh`, and `python validate.py --compare` locally.
 - Final verification on 2026-05-27 03:08 UTC made `scripts/evaluate.sh` discover generic candidate artifacts, tightened method-agnostic scoring documentation, adjusted the ablation primary metric to the scale-normalized savings percentage, and reran `bash scripts/reproduce.sh` plus `python validate.py --compare` successfully.
+- Final autonomy pass on 2026-05-27 03:12 UTC reread the paper summary with a subagent, audited the existing implementation against the paper's required Dynamic Partial Sorting, insertion/deletion, valid-bit, and deferred-depth-update steps, then reran `bash scripts/reproduce.sh`, `bash scripts/evaluate_train.sh`, `bash scripts/evaluate_test.sh`, and `python validate.py --compare` successfully.
 
 ## Results
 
@@ -35,6 +36,7 @@
 
 - Higher milestones would require trained 3DGS scenes or a more detailed hardware/cycle simulator. The paper's RTL/cycle simulator and trained scene checkpoints were not released with the paper.
 - No further productive expansion is available in this workspace without trained 3DGS scenes, the authors' simulator, or hardware RTL.
+- The current packaged environment is complete at `core_claim_plus`; further progress would require external unreleased assets or a substantially larger simulator effort outside the available evidence.
 
 ## Issues
 
