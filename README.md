@@ -59,15 +59,15 @@ Secondary claims include higher end-to-end throughput than Orin AGX and GSCore, 
 
 The benchmark measures memory traffic and ordering quality over a deterministic temporal sequence of per-tile Gaussian tables.
 
-`traffic_MB` estimates table-entry memory traffic; lower is better. `traffic_reduction_pct` compares a candidate against full per-frame sorting; higher is better. `pair_order_accuracy` checks deterministic broad pair relationships in each output order against exact depth-sorted order; higher is better. `mean_abs_rank_error` and `p99_abs_rank_error` measure displacement from exact depth rank; lower is better.
+`traffic_MB` estimates table-entry memory traffic; lower is better. `traffic_reduction_pct` compares a candidate against full per-frame sorting; higher is better. `pair_order_accuracy` checks deterministic broad pair relationships in each output order against exact depth-sorted order; higher is better. `adjacent_pair_accuracy` and `sampled_pair_order_accuracy` add local and odd-offset ordering checks. `mean_abs_rank_error` and `p99_abs_rank_error` measure displacement from exact depth rank; lower is better.
 
 ## Baselines and Targets
 
-The baseline is full sorting of each tile at each frame, which has perfect ordering but high memory traffic. The paper reports QHD traffic for 60 frames of 104.6 GB for GSCore and 19.6 GB for Neo, an 81.3% reduction, while quality degradation remains under 0.1 dB PSNR and 0.001 LPIPS. This reproduction uses an ordering-quality proxy instead of image PSNR because trained 3DGS scene checkpoints are not released.
+The baseline is full sorting of each tile at each frame, which has perfect ordering but high memory traffic. The paper reports QHD traffic for 60 frames of 104.6 GB for the full-sort hardware baseline and 19.6 GB for the proposed system, an 81.3% reduction, while quality degradation remains under 0.1 dB PSNR and 0.001 LPIPS. This reproduction uses an ordering-quality proxy instead of image PSNR because trained 3DGS scene checkpoints are not released.
 
 ## Evaluation Protocol
 
-Run `bash scripts/reproduce.sh` to generate the deterministic workload, run the full-sort baseline, run the candidate method, run the no-deferred-depth ablation, and write `scoring/scores.json`. Evaluation code in `eval/` reads per-tile predicted-order artifacts under `outputs/`, recomputes ordering quality against the workload, and must not import candidate method code. Workload generation uses a fixed seed and three temporal settings: high-retention, moderate-retention, and rapid-motion.
+Run `bash scripts/reproduce.sh` to generate the deterministic workload, produce the full-sort baseline artifact, produce candidate artifacts, and write `scoring/scores.json`. Evaluation code in `eval/` reads per-tile predicted-order artifacts under `outputs/`, recomputes ordering quality against the workload, and must not import candidate method code. Workload generation uses a fixed seed and three temporal settings: high-retention, moderate-retention, and rapid-motion.
 
 ---
 
@@ -286,6 +286,49 @@ Run `bash scripts/reproduce.sh` to generate the deterministic workload, run the 
 ### [2026-05-27 02:23] - core_claim_plus
 - Scheduler CPU test job `aff60dc0-5e4` completed successfully inside the packaged container.
 - The job reran `bash scripts/run.sh` and passed `python validate.py --compare` with both `synthetic_temporal_sorting` and `deferred_depth_update_ablation` present in `scoring/scores.json`.
+
+</details>
+
+### Iteration 8: gpt-5.5 (verifier)
+- **Milestone**: `core_claim_plus` | **Status**: done
+- **Working time**: 19m | **GPU**: 0.0h
+- **Jobs**: 8 total (7 completed, 1 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-05-27 02:11] - method_runs
+- Implemented Neo's reuse-and-update sorting flow: Dynamic Partial Sorting with interleaved chunk boundaries, insertion, deletion, and deferred depth update.
+- Implemented the full per-frame sorting baseline and artifact-based evaluator.
+- Verified `bash scripts/reproduce.sh` and `python validate.py --compare` locally.
+
+### [2026-05-27 02:11] - core_claim
+- Demonstrated the central benefit/constraint tradeoff on a deterministic temporal 3DGS sorting workload.
+- Reproduced a traffic reduction versus full sorting while preserving near-correct ordering: Neo achieved 55.95% lower table traffic with pair-order accuracy 1.0.
+- Verified the same workflow inside the scheduler container with CPU test job `597e7566-ff8`.
+
+### [2026-05-27 02:13] - core_claim_plus
+- Added per-regime diagnostics for high-retention, moderate-retention, and rapid-motion temporal traces.
+- Each regime shows substantial traffic reduction while maintaining pair-order accuracy, giving future agents multiple settings to improve.
+
+### [2026-05-27 02:20] - core_claim_plus
+- Audited the continuation workspace and confirmed the method implementation contains Neo's paper-specific reuse-and-update sorting steps rather than a surrogate model.
+- Added and locally validated a deferred-depth-update ablation: no-deferred Neo uses 21.2486 MB, while full Neo uses 14.6131 MB, showing a 31.2280% traffic saving from the deferred update path on the scaled workload.
+- Kept the milestone at `core_claim_plus`; higher milestones still require unreleased trained 3DGS scene checkpoints, the authors' cycle simulator or RTL, and full image rendering/quality evaluation.
+
+### [2026-05-27 02:23] - core_claim_plus
+- Scheduler CPU test job `aff60dc0-5e4` completed successfully inside the packaged container.
+- The job reran `bash scripts/run.sh` and passed `python validate.py --compare` with both `synthetic_temporal_sorting` and `deferred_depth_update_ablation` present in `scoring/scores.json`.
+
+### [2026-05-27 02:53] - core_claim_plus
+- Replaced the earlier deletion oracle with a valid-bit flow: rasterization-like visibility marks outgoing Gaussians, and the next merge step removes invalid entries.
+- Extended `scoring/scores.json` with adjacent-pair, sampled-pair, and deferred-update MB metrics, then locally reran reproduction, train/test evaluation, and validation successfully.
+- Updated results remain at `core_claim_plus`: Neo reduces table traffic by 50.8310% on the scaled temporal workload and saves 28.9147% traffic versus the no-deferred-depth ablation while preserving broad ordering structure.
+
+### [2026-05-27 03:08] - core_claim_plus
+- Final verification kept the milestone at `core_claim_plus`.
+- Made the official evaluator reusable for generic candidate artifacts, tightened method-agnostic documentation, and adjusted the component-ablation scoring weight toward the scale-normalized savings percentage.
+- Reran `bash scripts/reproduce.sh` and `python validate.py --compare`; all validation checks passed.
 
 </details>
 
