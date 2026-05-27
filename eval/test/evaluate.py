@@ -15,7 +15,7 @@ from pathlib import Path
 
 ENTRY_BYTES = 8
 SLICE_NAME = "test"
-FRAME_RULE = "frame_index_mod_4_in_0_or_3"
+FRAME_RULE = "update_frame_index_mod_4_in_0_or_3"
 
 
 def _load(path: Path) -> dict:
@@ -25,7 +25,7 @@ def _load(path: Path) -> dict:
 
 
 def _include_frame(frame_idx: int) -> bool:
-    return frame_idx % 4 in (0, 3)
+    return frame_idx > 0 and frame_idx % 4 in (0, 3)
 
 
 def _method_name(path: Path) -> str:
@@ -336,7 +336,7 @@ def evaluate(
         "_metadata": {
             "slice": SLICE_NAME,
             "frame_rule": FRAME_RULE,
-            "description": "Held-out test slice: frames with index modulo 4 equal to 0 or 3 in every scene.",
+            "description": "Held-out test slice: update frames with index modulo 4 equal to 0 or 3 in every scene.",
         },
         "experiments": {
             "synthetic_temporal_sorting": {

@@ -23,3 +23,7 @@
 - The stricter coverage check should be exercised on the existing artifacts during the next runner pass. It is expected to pass if artifacts contain all workload frames and tiles.
 - The new quality metrics may be near-saturated for exact or near-exact methods. They are still useful against shortcut artifacts, but the next runner should inspect train/test spread to ensure they are not all constant across candidate methods.
 - The test slice is still a disjoint frame split over the same workload, not a new hidden workload. It mainly detects overfitting to visible frame rules or partial-output shortcuts, not methods that memorize the public workload while preserving the artifact contract.
+
+## Runner Iteration Notes
+
+- First scoring job produced `scoring/scores_train.json` and then failed in the held-out evaluator because the test split included frame 0, while all artifacts begin at update frame 1. Adjusted `eval/test/evaluate.py` so the held-out slice remains disjoint but only scores update frames (`frame_idx > 0 and frame_idx % 4 in {0, 3}`).

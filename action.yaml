@@ -6,4 +6,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "Run evaluate_train.sh and evaluate_test.sh on existing final artifacts; populate split scores for inspection."
+notes: "Resubmit split scoring after fixing held-out evaluator to exclude non-artifact frame 0 while preserving disjoint update-frame test slice."
