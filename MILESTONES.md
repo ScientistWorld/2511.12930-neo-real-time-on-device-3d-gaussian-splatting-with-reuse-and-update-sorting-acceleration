@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: method_runs**
+**Current: core_claim**
 
 ## Progress Log
 
@@ -13,5 +13,10 @@
 - Implemented full per-frame sorting baseline and method-agnostic evaluator.
 - Local CPU reproduction runs end-to-end and writes `scoring/scores.json`.
 
+### [2026-05-27 03:05] - core_claim
+- Scheduler CPU test job `a5d0ec7a-e50` completed with exit code 0.
+- Container run reproduced the benchmark and `python validate.py --compare` passed.
+- Reuse-and-update sorting reduced table traffic by 54.62% versus full sorting while preserving broad pair order and keeping p99 rank error at 6.28 positions.
+
 ## Stop Justification
-- Not stopped. Submitting a CPU test job to verify the packaged environment before claiming `core_claim`.
+- Completed at milestone `core_claim`. The paper's actual reuse-and-update sorting algorithm is implemented and validated on a scaled temporal 3DGS sorting benchmark.

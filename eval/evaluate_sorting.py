@@ -43,6 +43,7 @@ def evaluate(neo_path: Path, baseline_path: Path, output_path: Path) -> None:
             "synthetic_temporal_sorting": {
                 "results": {
                     "full_sort": {
+                        "traffic_reduction_pct": 0.0,
                         "pair_order_accuracy": baseline["pair_order_accuracy"],
                         "traffic_MB": baseline["traffic_MB"],
                         "mean_abs_rank_error": baseline["mean_abs_rank_error"],

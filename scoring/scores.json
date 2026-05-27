@@ -3,6 +3,7 @@
     "synthetic_temporal_sorting": {
       "results": {
         "full_sort": {
+          "traffic_reduction_pct": 0.0,
           "pair_order_accuracy": 1.0,
           "traffic_MB": 33.1776,
           "mean_abs_rank_error": 0.0,

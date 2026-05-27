@@ -27,8 +27,8 @@
 #   milestone: core_claim
 #   notes: "Reproduced the core claim. Environment packaged."
 
-action: submit
+action: done
 gpus: 0
-test: true
-milestone: method_runs
-notes: "CPU smoke test: run scripts/reproduce.sh and validate the Neo reuse-and-update sorting benchmark inside the compute container."
+test: false
+milestone: core_claim
+notes: "Core claim reproduced: Neo reuse-and-update sorting runs end-to-end in the container, reduces table traffic versus full sorting, and preserves ordering quality on the scaled temporal 3DGS benchmark."

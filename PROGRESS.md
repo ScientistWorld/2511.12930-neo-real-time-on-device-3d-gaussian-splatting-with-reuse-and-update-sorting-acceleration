@@ -8,16 +8,17 @@
 - `baseline/full_sort.py` implements exact full per-frame sorting.
 - `eval/evaluate_sorting.py` reads output artifacts only and writes `scoring/scores.json`.
 - `bash scripts/reproduce.sh` completed locally and `python validate.py --compare` passed.
+- Scheduler CPU test job `a5d0ec7a-e50` completed successfully inside the container and passed validation.
 
 ## Results
 
 - Paper QHD memory result: GSCore 104.6 GB for 60 frames, Neo 19.6 GB, 81.3% reduction.
 - Scaled synthetic benchmark result: full sort 33.1776 MB, Neo reuse-and-update 15.0555 MB, 54.6215% reduction.
 - Ordering constraints on the scaled benchmark: broad pair-order accuracy 1.0, mean absolute rank error 1.6629, p99 rank error 6.2778.
+- The same results were reproduced by the completed scheduler job.
 
 ## Remaining
 
-- Run the packaged reproduction as a scheduler job. If the job reproduces the local result, update milestone to `core_claim`.
 - Higher milestones would require trained 3DGS scenes or a more detailed hardware/cycle simulator. The paper's RTL/cycle simulator and trained scene checkpoints were not released with the paper.
 
 ## Issues
