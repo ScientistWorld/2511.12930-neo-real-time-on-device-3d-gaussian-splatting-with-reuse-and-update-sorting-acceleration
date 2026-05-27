@@ -1,9 +1,9 @@
-# This iteration writes files only — do NOT submit compute jobs.
-# Once you set action to 'done', STOP immediately.
+# This iteration submits the train/test scoring job.
+# Once this file is written, STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: done
+action: submit
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "Improvements: required full slice frame/tile coverage, added adjacent and sampled order metrics, completed metric descriptions and coefficients. Notes: see DESIGN_NOTES.md."
+notes: "Run evaluate_train.sh and evaluate_test.sh on existing final artifacts; populate split scores for inspection."
