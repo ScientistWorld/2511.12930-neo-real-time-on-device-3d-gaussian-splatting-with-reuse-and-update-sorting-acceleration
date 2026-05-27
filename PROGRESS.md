@@ -9,6 +9,7 @@
 - `eval/evaluate_sorting.py` reads output artifacts only and writes `scoring/scores.json`.
 - `bash scripts/reproduce.sh` completed locally and `python validate.py --compare` passed.
 - Scheduler CPU test job `a5d0ec7a-e50` completed successfully inside the container and passed validation.
+- Local rerun at 2026-05-27 02:05 UTC again completed `bash scripts/reproduce.sh` and `python validate.py --compare` successfully.
 
 ## Results
 
@@ -20,6 +21,7 @@
 ## Remaining
 
 - Higher milestones would require trained 3DGS scenes or a more detailed hardware/cycle simulator. The paper's RTL/cycle simulator and trained scene checkpoints were not released with the paper.
+- A submitted CPU test job is queued to revalidate the packaged reproduction path in the compute container.
 
 ## Issues
 
