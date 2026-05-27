@@ -324,13 +324,16 @@ def evaluate(
         artifact = _load(method_paths[method])
         if method == baseline_method or _is_ablation_artifact(method, artifact):
             result["deferred_update_savings_pct"] = 0.0
+            result["deferred_update_savings_MB"] = 0.0
         else:
             ablation_method = _matching_ablation_method(method, method_paths)
             if ablation_method is None:
                 result["deferred_update_savings_pct"] = 0.0
+                result["deferred_update_savings_MB"] = 0.0
             else:
                 ablation_traffic = method_metrics[ablation_method]["traffic_MB"]
                 result["deferred_update_savings_pct"] = 100.0 * (1.0 - method_metrics[method]["traffic_MB"] / ablation_traffic)
+                result["deferred_update_savings_MB"] = ablation_traffic - method_metrics[method]["traffic_MB"]
         ablation_results[method] = result
 
     synthetic_results = _filter_to_train_methods(synthetic_results, train_methods, "synthetic_temporal_sorting")

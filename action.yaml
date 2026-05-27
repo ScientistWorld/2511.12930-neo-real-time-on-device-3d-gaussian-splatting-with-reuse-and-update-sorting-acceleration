@@ -6,4 +6,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "Resubmit split scoring after making official pair_order_accuracy target multi-scale and changing sampled metric to complementary odd-offset probes."
+notes: "Resubmit split scoring after adding absolute deferred_update_savings_MB as ablation primary metric to avoid train/test-invariant percentage primary."
