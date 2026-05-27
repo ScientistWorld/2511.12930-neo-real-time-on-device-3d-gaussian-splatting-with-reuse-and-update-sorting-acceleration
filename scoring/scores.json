@@ -17,6 +17,34 @@
           "p99_abs_rank_error": 6.350154320987654
         }
       }
+    },
+    "deferred_depth_update_ablation": {
+      "results": {
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "traffic_MB": 33.1776,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0,
+          "deferred_update_savings_pct": 0.0
+        },
+        "neo_no_deferred_depth_update": {
+          "pair_order_accuracy": 1.0,
+          "traffic_MB": 21.24864,
+          "traffic_reduction_pct": 35.9548611111111,
+          "deferred_update_savings_pct": 0.0,
+          "mean_abs_rank_error": 1.6864920910493828,
+          "p99_abs_rank_error": 6.350154320987654
+        },
+        "neo_reuse_update": {
+          "pair_order_accuracy": 1.0,
+          "traffic_MB": 14.613119999999999,
+          "traffic_reduction_pct": 55.95486111111112,
+          "mean_abs_rank_error": 1.6864920910493828,
+          "p99_abs_rank_error": 6.350154320987654,
+          "deferred_update_savings_pct": 31.22797506099215
+        }
+      }
     }
   }
 }

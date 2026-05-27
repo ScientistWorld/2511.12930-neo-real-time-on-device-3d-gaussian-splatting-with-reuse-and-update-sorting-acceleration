@@ -12,4 +12,4 @@ The baseline is full sorting of each tile at each frame, which has perfect order
 
 ## Evaluation Protocol
 
-Run `bash scripts/reproduce.sh` to generate the deterministic workload, run the full-sort baseline, run the candidate method, and write `scoring/scores.json`. Evaluation code in `eval/` reads per-tile predicted-order artifacts under `outputs/`, recomputes ordering quality against the workload, and must not import candidate method code. Workload generation uses a fixed seed and three temporal settings: high-retention, moderate-retention, and rapid-motion.
+Run `bash scripts/reproduce.sh` to generate the deterministic workload, run the full-sort baseline, run the candidate method, run the no-deferred-depth ablation, and write `scoring/scores.json`. Evaluation code in `eval/` reads per-tile predicted-order artifacts under `outputs/`, recomputes ordering quality against the workload, and must not import candidate method code. Workload generation uses a fixed seed and three temporal settings: high-retention, moderate-retention, and rapid-motion.

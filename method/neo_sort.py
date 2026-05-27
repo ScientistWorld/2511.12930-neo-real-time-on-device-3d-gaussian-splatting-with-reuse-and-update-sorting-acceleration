@@ -99,7 +99,12 @@ def rank_error_metrics(predicted: list[dict], ideal: list[dict]) -> dict:
     }
 
 
-def run_scene(scene_name: str, frames: list, chunk_size: int) -> dict:
+def run_scene(
+    scene_name: str,
+    frames: list,
+    chunk_size: int,
+    separate_depth_refresh: bool = False,
+) -> dict:
     previous_table: list[list[dict]] | None = None
     frame_outputs = []
     neo_accesses = 0
@@ -122,6 +127,11 @@ def run_scene(scene_name: str, frames: list, chunk_size: int) -> dict:
             reordered, partial_accesses = dynamic_partial_sort(prev_tile, frame_idx, chunk_size)
             merged, merge_accesses = merge_insert_delete(reordered, current_tile, incoming)
             tile_accesses = 2 * partial_accesses + merge_accesses + 2 * len(incoming)
+            if separate_depth_refresh:
+                # Ablation for removing Neo's deferred depth update: after
+                # rasterization the table must be refreshed by a separate read
+                # of current depths and a writeback of table entries.
+                tile_accesses += 2 * len(merged)
             neo_accesses += tile_accesses
             tile_outputs.append(
                 {
@@ -143,16 +153,17 @@ def run_scene(scene_name: str, frames: list, chunk_size: int) -> dict:
     }
 
 
-def run(workload_path: Path, output_path: Path) -> None:
+def run(workload_path: Path, output_path: Path, separate_depth_refresh: bool = False) -> None:
     workload = json.loads(workload_path.read_text())
     chunk_size = int(workload["metadata"]["chunk_size"])
     scenes = []
     for scene_name, scene in workload["scenes"].items():
-        scenes.append(run_scene(scene_name, scene["frames"], chunk_size))
+        scenes.append(run_scene(scene_name, scene["frames"], chunk_size, separate_depth_refresh))
     output = {
-        "method": "neo_reuse_update",
+        "method": "neo_no_deferred_depth_update" if separate_depth_refresh else "neo_reuse_update",
         "workload": str(workload_path),
         "chunk_size": chunk_size,
+        "separate_depth_refresh": separate_depth_refresh,
         "scenes": scenes,
     }
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -163,8 +174,13 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--workload", type=Path, default=Path("data/neo_synthetic_workload.json"))
     parser.add_argument("--output", type=Path, default=Path("outputs/neo_reuse_update.json"))
+    parser.add_argument(
+        "--separate-depth-refresh",
+        action="store_true",
+        help="Ablate Neo's deferred depth update by charging a separate depth-refresh pass.",
+    )
     args = parser.parse_args()
-    run(args.workload, args.output)
+    run(args.workload, args.output, args.separate_depth_refresh)
 
 
 if __name__ == "__main__":

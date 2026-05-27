@@ -20,6 +20,11 @@ python method/neo_sort.py \
   --workload data/neo_synthetic_workload.json \
   --output outputs/neo_reuse_update.json
 
+python method/neo_sort.py \
+  --workload data/neo_synthetic_workload.json \
+  --output outputs/neo_no_deferred_depth_update.json \
+  --separate-depth-refresh
+
 if [ ! -e outputs/full_sort.json ]; then
   bash scripts/baseline.sh
 fi

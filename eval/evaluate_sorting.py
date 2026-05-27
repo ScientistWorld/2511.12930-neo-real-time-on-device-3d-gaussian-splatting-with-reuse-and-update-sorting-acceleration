@@ -139,28 +139,56 @@ def evaluate(neo_path: Path, baseline_path: Path, output_path: Path) -> None:
     baseline = _aggregate(baseline_scenes)
     reduction = 100.0 * (1.0 - neo["traffic_MB"] / baseline["traffic_MB"])
 
+    experiment_results = {
+        "full_sort": {
+            "traffic_reduction_pct": 0.0,
+            "pair_order_accuracy": baseline["pair_order_accuracy"],
+            "traffic_MB": baseline["traffic_MB"],
+            "mean_abs_rank_error": baseline["mean_abs_rank_error"],
+            "p99_abs_rank_error": baseline["p99_abs_rank_error"],
+        },
+        "neo_reuse_update": {
+            "pair_order_accuracy": neo["pair_order_accuracy"],
+            "traffic_MB": neo["traffic_MB"],
+            "traffic_reduction_pct": reduction,
+            "mean_abs_rank_error": neo["mean_abs_rank_error"],
+            "p99_abs_rank_error": neo["p99_abs_rank_error"],
+        },
+    }
     scores = {
         "experiments": {
             "synthetic_temporal_sorting": {
-                "results": {
-                    "full_sort": {
-                        "traffic_reduction_pct": 0.0,
-                        "pair_order_accuracy": baseline["pair_order_accuracy"],
-                        "traffic_MB": baseline["traffic_MB"],
-                        "mean_abs_rank_error": baseline["mean_abs_rank_error"],
-                        "p99_abs_rank_error": baseline["p99_abs_rank_error"],
-                    },
-                    "neo_reuse_update": {
-                        "pair_order_accuracy": neo["pair_order_accuracy"],
-                        "traffic_MB": neo["traffic_MB"],
-                        "traffic_reduction_pct": reduction,
-                        "mean_abs_rank_error": neo["mean_abs_rank_error"],
-                        "p99_abs_rank_error": neo["p99_abs_rank_error"],
-                    },
-                }
+                "results": experiment_results
             }
         }
     }
+    no_deferred_path = neo_path.with_name("neo_no_deferred_depth_update.json")
+    if no_deferred_path.exists():
+        no_deferred_artifact = _load(no_deferred_path)
+        no_deferred_scenes = _by_scene_metrics(no_deferred_artifact, workload)
+        no_deferred = _aggregate(no_deferred_scenes)
+        no_deferred_reduction = 100.0 * (1.0 - no_deferred["traffic_MB"] / baseline["traffic_MB"])
+        deferred_savings = 100.0 * (1.0 - neo["traffic_MB"] / no_deferred["traffic_MB"])
+        scores["experiments"]["deferred_depth_update_ablation"] = {
+            "results": {
+                "full_sort": {
+                    **experiment_results["full_sort"],
+                    "deferred_update_savings_pct": 0.0,
+                },
+                "neo_no_deferred_depth_update": {
+                    "pair_order_accuracy": no_deferred["pair_order_accuracy"],
+                    "traffic_MB": no_deferred["traffic_MB"],
+                    "traffic_reduction_pct": no_deferred_reduction,
+                    "deferred_update_savings_pct": 0.0,
+                    "mean_abs_rank_error": no_deferred["mean_abs_rank_error"],
+                    "p99_abs_rank_error": no_deferred["p99_abs_rank_error"],
+                },
+                "neo_reuse_update": {
+                    **experiment_results["neo_reuse_update"],
+                    "deferred_update_savings_pct": deferred_savings,
+                },
+            }
+        }
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(scores, indent=2))
     diagnostics_path = output_path.with_name("per_regime_scores.json")

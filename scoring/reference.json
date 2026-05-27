@@ -2,7 +2,7 @@
   "experiments": {
     "synthetic_temporal_sorting": {
       "description": "Temporal per-tile 3DGS sorting benchmark inspired by the paper's core QHD result. Traffic reduction and preserved ordering quality capture the central benefit/constraint tradeoff.",
-      "weight": 1.0,
+      "weight": 0.7,
       "primary_metric": "traffic_reduction_pct",
       "metrics": {
         "traffic_reduction_pct": {"higher_is_better": true, "coefficient": 1.0},
@@ -23,6 +23,48 @@
         "neo_reuse_update": {
           "type": "proposed",
           "traffic_reduction_pct": 81.3,
+          "traffic_MB": 19.6,
+          "pair_order_accuracy": 0.999,
+          "mean_abs_rank_error": 0.1,
+          "p99_abs_rank_error": 31.0
+        }
+      }
+    },
+    "deferred_depth_update_ablation": {
+      "description": "Component ablation from the paper: sorting-engine-only reuse reduces traffic, and deferred depth update in the full Neo design removes an additional depth-refresh pass.",
+      "weight": 0.3,
+      "primary_metric": "deferred_update_savings_pct",
+      "metrics": {
+        "traffic_reduction_pct": {"higher_is_better": true, "coefficient": 0.8},
+        "deferred_update_savings_pct": {"higher_is_better": true, "coefficient": 1.0},
+        "traffic_MB": {"higher_is_better": false, "coefficient": -0.5},
+        "pair_order_accuracy": {"higher_is_better": true, "coefficient": 0.5},
+        "mean_abs_rank_error": {"higher_is_better": false, "coefficient": -0.1},
+        "p99_abs_rank_error": {"higher_is_better": false, "coefficient": -0.1}
+      },
+      "results": {
+        "full_sort": {
+          "type": "baseline",
+          "traffic_reduction_pct": 0.0,
+          "deferred_update_savings_pct": 0.0,
+          "traffic_MB": 104.6,
+          "pair_order_accuracy": 1.0,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0
+        },
+        "neo_no_deferred_depth_update": {
+          "type": "proposed",
+          "traffic_reduction_pct": 71.1,
+          "deferred_update_savings_pct": 0.0,
+          "traffic_MB": 30.2,
+          "pair_order_accuracy": 0.999,
+          "mean_abs_rank_error": 0.1,
+          "p99_abs_rank_error": 31.0
+        },
+        "neo_reuse_update": {
+          "type": "proposed",
+          "traffic_reduction_pct": 81.3,
+          "deferred_update_savings_pct": 35.8,
           "traffic_MB": 19.6,
           "pair_order_accuracy": 0.999,
           "mean_abs_rank_error": 0.1,

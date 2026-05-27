@@ -17,3 +17,9 @@ Tests whether the traffic reduction preserves near-correct depth ordering rather
 Tests worst-case rank displacement under temporal motion.
 - **Metric**: `p99_abs_rank_error` (lower is better)
 - **Run**: `bash scripts/reproduce.sh`
+
+## Secondary: deferred_depth_update_ablation
+
+Tests the paper's claim that deferred depth update avoids a separate depth-refresh pass after sorting/rasterization.
+- **Metric**: `deferred_update_savings_pct` (higher is better)
+- **Run**: `bash scripts/reproduce.sh`
