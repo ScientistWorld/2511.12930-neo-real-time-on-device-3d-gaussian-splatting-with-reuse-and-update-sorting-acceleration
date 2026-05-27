@@ -37,7 +37,8 @@
           "traffic_MB": 17.69472,
           "mean_abs_rank_error": 0.0,
           "p99_abs_rank_error": 0.0,
-          "deferred_update_savings_pct": 0.0
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
         },
         "neo_no_deferred_depth_update": {
           "traffic_reduction_pct": 35.954861111111114,
@@ -47,7 +48,8 @@
           "traffic_MB": 11.332608,
           "mean_abs_rank_error": 1.656177662037037,
           "p99_abs_rank_error": 6.2329282407407405,
-          "deferred_update_savings_pct": 0.0
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
         },
         "neo_reuse_update": {
           "traffic_reduction_pct": 55.95486111111112,
@@ -57,7 +59,8 @@
           "traffic_MB": 7.793664,
           "mean_abs_rank_error": 1.656177662037037,
           "p99_abs_rank_error": 6.2329282407407405,
-          "deferred_update_savings_pct": 31.22797506099214
+          "deferred_update_savings_pct": 31.22797506099214,
+          "deferred_update_savings_MB": 3.5389440000000008
         }
       }
     }
