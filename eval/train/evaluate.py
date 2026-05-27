@@ -58,7 +58,13 @@ def _rank_error_metrics(predicted_ids: list[int], ideal_tile: list[dict]) -> dic
         extra = set(predicted_ids) - set(ideal_ids)
         raise ValueError(f"Predicted order does not match tile membership: missing={len(missing)} extra={len(extra)}")
     if not predicted_ids:
-        return {"mean_abs_rank_error": 0.0, "p99_abs_rank_error": 0.0, "pair_order_accuracy": 1.0}
+        return {
+            "mean_abs_rank_error": 0.0,
+            "p99_abs_rank_error": 0.0,
+            "pair_order_accuracy": 1.0,
+            "adjacent_pair_accuracy": 1.0,
+            "sampled_pair_order_accuracy": 1.0,
+        }
 
     errors = sorted(abs(idx - ideal_rank[row_id]) for idx, row_id in enumerate(predicted_ids))
     mean_error = sum(errors) / len(errors)
@@ -73,10 +79,27 @@ def _rank_error_metrics(predicted_ids: list[int], ideal_tile: list[dict]) -> dic
             total_pairs += 1
             if ideal_rank[predicted_ids[idx]] <= ideal_rank[predicted_ids[idx + stride]]:
                 correct_pairs += 1
+    adjacent_pairs = max(len(predicted_ids) - 1, 0)
+    adjacent_correct = sum(
+        1
+        for idx in range(adjacent_pairs)
+        if ideal_rank[predicted_ids[idx]] <= ideal_rank[predicted_ids[idx + 1]]
+    )
+
+    sampled_correct = 0
+    sampled_total = 0
+    sample_indices = sorted(set(range(0, len(predicted_ids), max(len(predicted_ids) // 32, 1))) | {len(predicted_ids) - 1})
+    for left_pos, left_idx in enumerate(sample_indices):
+        for right_idx in sample_indices[left_pos + 1:]:
+            sampled_total += 1
+            if ideal_rank[predicted_ids[left_idx]] <= ideal_rank[predicted_ids[right_idx]]:
+                sampled_correct += 1
     return {
         "mean_abs_rank_error": mean_error,
         "p99_abs_rank_error": float(p99_error),
         "pair_order_accuracy": correct_pairs / total_pairs if total_pairs else 1.0,
+        "adjacent_pair_accuracy": adjacent_correct / adjacent_pairs if adjacent_pairs else 1.0,
+        "sampled_pair_order_accuracy": sampled_correct / sampled_total if sampled_total else 1.0,
     }
 
 
@@ -85,30 +108,49 @@ def _scene_metrics(scene_artifact: dict, scene_workload: dict) -> dict:
     total_entries = 0
     traffic_entries = 0
     weighted_pair_accuracy = 0.0
+    weighted_adjacent_pair_accuracy = 0.0
+    weighted_sampled_pair_accuracy = 0.0
     weighted_mean_rank = 0.0
     weighted_p99_rank = 0.0
     frames = 0
 
-    for frame_output in scene_artifact["frames"]:
-        frame_idx = int(frame_output["frame"])
-        if not _include_frame(frame_idx):
-            continue
+    expected_frames = {idx for idx in range(len(workload_frames)) if _include_frame(idx)}
+    output_by_frame = {int(frame_output["frame"]): frame_output for frame_output in scene_artifact["frames"]}
+    missing_frames = expected_frames - set(output_by_frame)
+    if missing_frames:
+        raise ValueError(f"Artifact omits {SLICE_NAME} frames: {sorted(missing_frames)[:8]}")
+
+    for frame_idx in sorted(expected_frames):
+        frame_output = output_by_frame[frame_idx]
         frames += 1
         current_frame = workload_frames[frame_idx]
-        for tile_output in frame_output["tiles"]:
-            tile_idx = int(tile_output["tile"])
+        expected_tiles = set(range(len(current_frame)))
+        output_by_tile = {int(tile_output["tile"]): tile_output for tile_output in frame_output["tiles"]}
+        missing_tiles = expected_tiles - set(output_by_tile)
+        extra_tiles = set(output_by_tile) - expected_tiles
+        if missing_tiles or extra_tiles:
+            raise ValueError(
+                f"Frame {frame_idx} tile coverage mismatch: missing={sorted(missing_tiles)[:8]} "
+                f"extra={sorted(extra_tiles)[:8]}"
+            )
+        for tile_idx in sorted(expected_tiles):
+            tile_output = output_by_tile[tile_idx]
             current_tile = current_frame[tile_idx]
             metrics = _rank_error_metrics(tile_output["predicted_order"], current_tile)
             entries = len(current_tile)
             total_entries += entries
             traffic_entries += int(tile_output["traffic_entries"])
             weighted_pair_accuracy += metrics["pair_order_accuracy"] * entries
+            weighted_adjacent_pair_accuracy += metrics["adjacent_pair_accuracy"] * entries
+            weighted_sampled_pair_accuracy += metrics["sampled_pair_order_accuracy"] * entries
             weighted_mean_rank += metrics["mean_abs_rank_error"] * entries
             weighted_p99_rank += metrics["p99_abs_rank_error"] * entries
 
     denom = max(total_entries, 1)
     return {
         "pair_order_accuracy": weighted_pair_accuracy / denom,
+        "adjacent_pair_accuracy": weighted_adjacent_pair_accuracy / denom,
+        "sampled_pair_order_accuracy": weighted_sampled_pair_accuracy / denom,
         "mean_abs_rank_error": weighted_mean_rank / denom,
         "p99_abs_rank_error": weighted_p99_rank / denom,
         "traffic_entries": traffic_entries,
@@ -131,6 +173,8 @@ def _aggregate(scene_metrics: dict[str, dict]) -> dict:
     total_entries = sum(scene["entries"] for scene in scene_metrics.values()) or 1
     return {
         "pair_order_accuracy": sum(s["pair_order_accuracy"] * s["entries"] for s in scene_metrics.values()) / total_entries,
+        "adjacent_pair_accuracy": sum(s["adjacent_pair_accuracy"] * s["entries"] for s in scene_metrics.values()) / total_entries,
+        "sampled_pair_order_accuracy": sum(s["sampled_pair_order_accuracy"] * s["entries"] for s in scene_metrics.values()) / total_entries,
         "mean_abs_rank_error": sum(s["mean_abs_rank_error"] * s["entries"] for s in scene_metrics.values()) / total_entries,
         "p99_abs_rank_error": sum(s["p99_abs_rank_error"] * s["entries"] for s in scene_metrics.values()) / total_entries,
         "traffic_MB": sum(scene["traffic_MB"] for scene in scene_metrics.values()),
@@ -143,6 +187,8 @@ def _score_against_baseline(metrics: dict, baseline: dict, is_baseline: bool = F
     return {
         "traffic_reduction_pct": reduction,
         "pair_order_accuracy": metrics["pair_order_accuracy"],
+        "adjacent_pair_accuracy": metrics["adjacent_pair_accuracy"],
+        "sampled_pair_order_accuracy": metrics["sampled_pair_order_accuracy"],
         "traffic_MB": metrics["traffic_MB"],
         "mean_abs_rank_error": metrics["mean_abs_rank_error"],
         "p99_abs_rank_error": metrics["p99_abs_rank_error"],

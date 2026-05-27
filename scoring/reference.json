@@ -5,11 +5,41 @@
       "weight": 0.7,
       "primary_metric": "traffic_reduction_pct",
       "metrics": {
-        "traffic_reduction_pct": {"higher_is_better": true, "coefficient": 1.0},
-        "traffic_MB": {"higher_is_better": false, "coefficient": -0.5},
-        "pair_order_accuracy": {"higher_is_better": true, "coefficient": 0.8},
-        "mean_abs_rank_error": {"higher_is_better": false, "coefficient": -0.2},
-        "p99_abs_rank_error": {"higher_is_better": false, "coefficient": -0.2}
+        "traffic_reduction_pct": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Primary benefit metric: reduction in sorting-table traffic relative to full sorting."
+        },
+        "traffic_MB": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Machine-independent traffic volume penalty, preventing percentage gains from hiding high absolute traffic."
+        },
+        "pair_order_accuracy": {
+          "higher_is_better": true,
+          "coefficient": 0.45,
+          "description": "Sparse long-range order preservation metric over deterministic within-tile pair probes."
+        },
+        "adjacent_pair_accuracy": {
+          "higher_is_better": true,
+          "coefficient": 0.45,
+          "description": "Local order preservation metric that catches near-neighbor scrambling missed by sparse long-range probes."
+        },
+        "sampled_pair_order_accuracy": {
+          "higher_is_better": true,
+          "coefficient": 0.35,
+          "description": "Deterministic sampled Kendall-style order metric that broadens pair coverage without all-pairs cost."
+        },
+        "mean_abs_rank_error": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Average absolute displacement from exact depth order."
+        },
+        "p99_abs_rank_error": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Tail displacement metric for rare but severe ordering failures."
+        }
       },
       "results": {
         "full_sort": {
@@ -35,12 +65,46 @@
       "weight": 0.3,
       "primary_metric": "deferred_update_savings_pct",
       "metrics": {
-        "traffic_reduction_pct": {"higher_is_better": true, "coefficient": 0.8},
-        "deferred_update_savings_pct": {"higher_is_better": true, "coefficient": 1.0},
-        "traffic_MB": {"higher_is_better": false, "coefficient": -0.5},
-        "pair_order_accuracy": {"higher_is_better": true, "coefficient": 0.5},
-        "mean_abs_rank_error": {"higher_is_better": false, "coefficient": -0.1},
-        "p99_abs_rank_error": {"higher_is_better": false, "coefficient": -0.1}
+        "traffic_reduction_pct": {
+          "higher_is_better": true,
+          "coefficient": 0.7,
+          "description": "Overall traffic benefit retained in the deferred-depth ablation setting."
+        },
+        "deferred_update_savings_pct": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Component benefit metric: traffic saved by avoiding the separate depth-refresh pass."
+        },
+        "traffic_MB": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Absolute traffic penalty for the ablation artifacts."
+        },
+        "pair_order_accuracy": {
+          "higher_is_better": true,
+          "coefficient": 0.35,
+          "description": "Sparse long-range order preservation metric for ablation outputs."
+        },
+        "adjacent_pair_accuracy": {
+          "higher_is_better": true,
+          "coefficient": 0.35,
+          "description": "Local order preservation metric for ablation outputs."
+        },
+        "sampled_pair_order_accuracy": {
+          "higher_is_better": true,
+          "coefficient": 0.25,
+          "description": "Deterministic sampled Kendall-style order metric for ablation outputs."
+        },
+        "mean_abs_rank_error": {
+          "higher_is_better": false,
+          "coefficient": -0.1,
+          "description": "Average absolute displacement from exact depth order in the ablation setting."
+        },
+        "p99_abs_rank_error": {
+          "higher_is_better": false,
+          "coefficient": -0.15,
+          "description": "Tail displacement penalty for severe ordering failures in the ablation setting."
+        }
       },
       "results": {
         "full_sort": {
