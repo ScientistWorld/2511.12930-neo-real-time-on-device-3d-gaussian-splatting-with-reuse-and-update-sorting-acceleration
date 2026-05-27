@@ -1,21 +1,17 @@
 # Reproduction Milestones
 
-**Current: none**
-
-<!-- Milestone levels (update "Current" above as you progress):
-  none             — just started, no meaningful progress yet
-  method_runs      — the paper's method executes end-to-end without errors
-  core_claim       — minimum experiment supports the paper's central claim
-  core_claim_plus  — core claim reproduced on additional settings
-  secondary_claims — secondary results or contributions reproduced
-  majority         — more than half of reported results reproduced
-  near_complete    — most results reproduced, only minor gaps remain
-  full             — all reported results reproduced
--->
+**Current: method_runs**
 
 ## Progress Log
 
-<!-- Write your progress here -->
+### [2026-05-27 02:20] - none
+- Started reproduction of Neo from paper markdown.
+- Identified the core reproducible algorithm: reuse-and-update sorting for per-tile 3DGS Gaussian tables.
+
+### [2026-05-27 02:55] - method_runs
+- Implemented Dynamic Partial Sorting with alternating half-chunk boundaries, insertion, deletion, and deferred depth refresh in `method/neo_sort.py`.
+- Implemented full per-frame sorting baseline and method-agnostic evaluator.
+- Local CPU reproduction runs end-to-end and writes `scoring/scores.json`.
 
 ## Stop Justification
-- Completed at milestone `none`.
+- Not stopped. Submitting a CPU test job to verify the packaged environment before claiming `core_claim`.

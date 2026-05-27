@@ -1,0 +1,21 @@
+{
+  "experiments": {
+    "synthetic_temporal_sorting": {
+      "results": {
+        "full_sort": {
+          "pair_order_accuracy": 1.0,
+          "traffic_MB": 33.1776,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0
+        },
+        "neo_reuse_update": {
+          "pair_order_accuracy": 1.0,
+          "traffic_MB": 15.055488,
+          "traffic_reduction_pct": 54.62152777777778,
+          "mean_abs_rank_error": 1.6629052131558644,
+          "p99_abs_rank_error": 6.277777777777778
+        }
+      }
+    }
+  }
+}

@@ -17,4 +17,12 @@ set -e
 
 cd /home/user
 
-# TODO: run baseline
+mkdir -p data outputs
+
+if [ ! -e data/neo_synthetic_workload.json ]; then
+  python data/synthetic_workload.py --output data/neo_synthetic_workload.json
+fi
+
+python baseline/full_sort.py \
+  --workload data/neo_synthetic_workload.json \
+  --output outputs/full_sort.json

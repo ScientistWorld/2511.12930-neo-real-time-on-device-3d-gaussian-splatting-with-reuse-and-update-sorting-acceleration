@@ -26,5 +26,7 @@ cd /home/user
 
 mkdir -p scoring
 
-# TODO: implement evaluation using code in eval/
-# Must write scoring/scores.json at the end
+python eval/evaluate_sorting.py \
+  --neo outputs/neo_reuse_update.json \
+  --baseline outputs/full_sort.json \
+  --output scoring/scores.json
