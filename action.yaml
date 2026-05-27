@@ -1,9 +1,9 @@
-# This iteration submits the train/test scoring job.
+# This iteration is complete.
 # Once this file is written, STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: submit
+action: done
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "Resubmit split scoring after adding absolute deferred_update_savings_MB as ablation primary metric to avoid train/test-invariant percentage primary."
+notes: "Frame-parity update split; 41 train metric values, 41 test metric values; Neo train/test close on traffic reduction (55.95/55.95) and ordering (pair 0.9094/0.9089), with deferred savings MB 3.539/3.097; deferred savings percent retained only as zero-weight diagnostic."

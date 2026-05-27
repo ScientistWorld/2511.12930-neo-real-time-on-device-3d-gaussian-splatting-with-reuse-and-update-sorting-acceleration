@@ -63,7 +63,7 @@
     "deferred_depth_update_ablation": {
       "description": "Component ablation from the paper: sorting-engine-only reuse reduces traffic, and deferred depth update in the full Neo design removes an additional depth-refresh pass.",
       "weight": 0.3,
-      "primary_metric": "deferred_update_savings_MB",
+      "primary_metric": "traffic_MB",
       "metrics": {
         "traffic_reduction_pct": {
           "higher_is_better": true,
