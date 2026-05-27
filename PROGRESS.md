@@ -17,6 +17,7 @@
 - Continuation audit on 2026-05-27 found the implementation to be a real scaled version of Neo's sorting algorithm, not a surrogate. The audit also found that root `README.md` and `manifest.json` are read-only bind mounts to `devtmpfs[/null]`; they cannot be replaced from inside this container and have been excluded from the working diff.
 - Added `deferred_depth_update_ablation`: `method/neo_sort.py` can now run a no-deferred-depth variant that charges a separate depth refresh pass, and `eval/evaluate_sorting.py` scores it from artifacts without importing method code.
 - Local rerun at 2026-05-27 02:18 UTC completed `bash scripts/reproduce.sh`, `bash scripts/evaluate.sh`, and `python validate.py --compare` successfully with both scored experiments.
+- Scheduler CPU test job `aff60dc0-5e4` completed successfully inside the container at 2026-05-27 02:23 UTC. It ran `bash scripts/run.sh`, wrote the two-experiment `scoring/scores.json`, and passed `python validate.py --compare`.
 
 ## Results
 
@@ -30,8 +31,7 @@
 ## Remaining
 
 - Higher milestones would require trained 3DGS scenes or a more detailed hardware/cycle simulator. The paper's RTL/cycle simulator and trained scene checkpoints were not released with the paper.
-- A scheduler CPU test is being submitted to validate the new ablation inside the packaged environment.
-- Beyond that, further productive expansion would require trained 3DGS scenes, the authors' simulator, or hardware RTL.
+- No further productive expansion is available in this workspace without trained 3DGS scenes, the authors' simulator, or hardware RTL.
 
 ## Issues
 

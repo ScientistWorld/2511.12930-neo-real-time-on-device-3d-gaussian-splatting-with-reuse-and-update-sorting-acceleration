@@ -22,3 +22,11 @@
 - Audited the continuation workspace and confirmed the method implementation contains Neo's paper-specific reuse-and-update sorting steps rather than a surrogate model.
 - Added and locally validated a deferred-depth-update ablation: no-deferred Neo uses 21.2486 MB, while full Neo uses 14.6131 MB, showing a 31.2280% traffic saving from the deferred update path on the scaled workload.
 - Kept the milestone at `core_claim_plus`; higher milestones still require unreleased trained 3DGS scene checkpoints, the authors' cycle simulator or RTL, and full image rendering/quality evaluation.
+
+### [2026-05-27 02:23] - core_claim_plus
+- Scheduler CPU test job `aff60dc0-5e4` completed successfully inside the packaged container.
+- The job reran `bash scripts/run.sh` and passed `python validate.py --compare` with both `synthetic_temporal_sorting` and `deferred_depth_update_ablation` present in `scoring/scores.json`.
+
+## Stop Justification
+- Completed at milestone `core_claim_plus`. The environment now validates Neo's core traffic/order tradeoff on multiple synthetic temporal regimes plus the deferred-depth-update component ablation.
+- Higher milestones would require unreleased trained 3DGS scene checkpoints, the authors' cycle simulator or RTL, and full image rendering/quality evaluation.
