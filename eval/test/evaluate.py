@@ -85,12 +85,13 @@ def _rank_error_metrics(predicted_ids: list[int], ideal_tile: list[dict]) -> dic
 
     correct_pairs = 0
     total_pairs = 0
-    for stride in (32, 64, 128):
-        if stride >= len(predicted_ids):
+    pair_step = max(len(predicted_ids) // 64, 1)
+    for offset in (1, 2, 4, 8, 16, 32, 64, 128):
+        if offset >= len(predicted_ids):
             continue
-        for idx in range(0, len(predicted_ids) - stride, stride):
+        for idx in range(0, len(predicted_ids) - offset, pair_step):
             total_pairs += 1
-            if ideal_rank[predicted_ids[idx]] <= ideal_rank[predicted_ids[idx + stride]]:
+            if ideal_rank[predicted_ids[idx]] <= ideal_rank[predicted_ids[idx + offset]]:
                 correct_pairs += 1
     adjacent_pairs = max(len(predicted_ids) - 1, 0)
     adjacent_correct = sum(
@@ -102,10 +103,11 @@ def _rank_error_metrics(predicted_ids: list[int], ideal_tile: list[dict]) -> dic
     sampled_correct = 0
     sampled_total = 0
     sample_step = max(len(predicted_ids) // 64, 1)
-    for offset in (1, 2, 4, 8, 16, 32, 64, 128):
+    for offset in (3, 5, 9, 17, 33, 65, 129):
         if offset >= len(predicted_ids):
             continue
-        for idx in range(0, len(predicted_ids) - offset, sample_step):
+        start = min(offset // 2, len(predicted_ids) - offset - 1)
+        for idx in range(start, len(predicted_ids) - offset, sample_step):
             sampled_total += 1
             if ideal_rank[predicted_ids[idx]] <= ideal_rank[predicted_ids[idx + offset]]:
                 sampled_correct += 1
