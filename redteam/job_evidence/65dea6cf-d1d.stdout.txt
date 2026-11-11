@@ -1,0 +1,54 @@
+[hive] This stdout log is managed by Hive.
+[hive] job_id: 67010033
+[hive] host: node
+[hive] node_id: 5b56c1bb00c851f2c3f93b346fd15ddec87104a85e26c62af4985535
+[hive] user: nexus/user (remote)
+[hive] resource: gpu-cpu
+[hive] gpus: 0
+[hive] cpus: 1
+[hive] workdir: /home/user
+[hive] timeout_sec: 21600
+[hive] started_at: 2026-11-11 01:19:17 EST
+[hive] command: apptainer exec --containall --cleanenv --env HF_HOME=/home/user/shared/hf_cache --env TRANSFORMERS_CACHE=/home/user/shared/hf_cache --env HF_DATASETS_CACHE=/home/user/shared/hf_cache/datasets --env TORCH_HOME=/home/user/shared/hf_cache/torch --bind /home/user/scratch/AgentWorkspaces/workspaces/2511.12930:/home/user --overlay /home/user/scratch/AgentWorkspaces/workspaces/2511.12930/environment/overlay.img:ro --bind /home/user/scratch/AgentWorkspaces/shared/datasets:/home/user/shared/datasets:ro --bind /home/user/scratch/AgentWorkspaces/shared/models:/home/user/shared/models:ro --bind /home/user/scratch/AgentWorkspaces/shared/hf_cache:/home/user/shared/hf_cache /home/user/scratch/AgentWorkspaces/workspaces/2511.12930/environment/container.sif bash -c 'cd /home/user && bash /home/user/scripts/run.sh'
+{"case": "reference_seed101", "train": {"returncode": 0, "seconds": 7.519733437002287}, "test": {"returncode": 0, "seconds": 2.6189591739967}}
+{"case": "reference_seed102", "train": {"returncode": 0, "seconds": 7.915797438996378}, "test": {"returncode": 0, "seconds": 3.0172310240013758}}
+{"case": "reference_seed103", "train": {"returncode": 0, "seconds": 4.72013469900412}, "test": {"returncode": 0, "seconds": 3.2909960170072736}}
+{"case": "better_current_depth_fix", "train": {"returncode": 0, "seconds": 4.230949540011352}, "test": {"returncode": 0, "seconds": 3.4227630579989636}}
+{"case": "weaker_no_partial_sort", "train": {"returncode": 0, "seconds": 6.394232300997828}, "test": {"returncode": 0, "seconds": 3.3696889220009325}}
+{"case": "honest_brute_force", "train": {"returncode": 0, "seconds": 5.225066330996924}, "test": {"returncode": 0, "seconds": 2.4234306559956167}}
+{"case": "shortcut_copy_sorted_input", "train": {"returncode": 0, "seconds": 2.483324127999367}, "test": {"returncode": 0, "seconds": 1.3019138620002195}}
+{"case": "shortcut_zero_traffic", "train": {"returncode": 0, "seconds": 2.7228063579968875}, "test": {"returncode": 0, "seconds": 1.2764994089957327}}
+{"case": "shortcut_negative_traffic", "train": {"returncode": 0, "seconds": 2.5171820059913443}, "test": {"returncode": 0, "seconds": 1.3654786760016577}}
+{"case": "shortcut_baseline_inflate", "train": {"returncode": 0, "seconds": 2.88639780000085}, "test": {"returncode": 0, "seconds": 3.026503432993195}}
+{"case": "shortcut_ablation_inflate", "train": {"returncode": 0, "seconds": 6.670547986999736}, "test": {"returncode": 0, "seconds": 1.4210992059961427}}
+{"case": "shortcut_omit_scenes", "train": {"returncode": 0, "seconds": 4.001817994998419}, "test": {"returncode": 0, "seconds": 2.4703217210044386}}
+{"case": "shortcut_empty_scenes", "train": {"returncode": 0, "seconds": 2.7393254460039316}, "test": {"returncode": 0, "seconds": 3.1626880560070276}}
+{"case": "shortcut_reverse_orders", "train": {"returncode": 0, "seconds": 3.600160269998014}, "test": {"returncode": 0, "seconds": 1.4734696990053635}}
+{"case": "shortcut_workload_shrink", "train": {"returncode": 0, "seconds": 0.5406632859958336}, "test": {"returncode": 0, "seconds": 0.5795200290012872}}
+{"case": "shortcut_score_file_forge", "train": {"returncode": 0, "seconds": 5.418161128007341}, "test": {"returncode": 0, "seconds": 2.9755577009927947}}
+{"case": "shortcut_unregistered_method", "train": {"returncode": 0, "seconds": 2.105740690996754}, "test": {"returncode": 0, "seconds": 1.1179865089943632}}
+{"case": "shortcut_null_traffic", "train": {"returncode": 1, "seconds": 2.8766390850069}, "test": {"returncode": 1, "seconds": 3.38070188400161}}
+{"case": "shortcut_empty_orders", "train": {"returncode": 1, "seconds": 2.8563652049924713}, "test": {"returncode": 1, "seconds": 2.1464641289931023}}
+| Run | Test | Reduction % | MB | Adjacent accuracy | Mean rank error | P99 rank error | Paired savings % | Rank, honest scales | Rank, all scales | Rank, pairwise |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| reference_seed101 | scored | 50.561343 | 7.654528 | 0.656159 | 1.720362 | 6.484127 | 28.802400 | 0.000000 | 0.000000 | 0.000000 |
+| reference_seed102 | scored | 50.561343 | 7.654528 | 0.656159 | 1.720362 | 6.484127 | 28.802400 | 0.000000 | 0.000000 | 0.000000 |
+| reference_seed103 | scored | 50.561343 | 7.654528 | 0.656159 | 1.720362 | 6.484127 | 28.802400 | 0.000000 | 0.000000 | 0.000000 |
+| better_current_depth_fix | scored | 30.561343 | 10.751104 | 0.997847 | 0.015801 | 0.511905 | 22.361695 | 1.282902 | -0.084808 | 0.100000 |
+| weaker_no_partial_sort | scored | 73.258102 | 4.140416 | 0.597730 | 3.361524 | 12.410714 | 42.788164 | -0.165193 | 0.728152 | -0.100000 |
+| honest_brute_force | scored | 0.000000 | 15.482880 | 1.000000 | 0.000000 | 0.000000 | 16.666667 | -0.122673 | -1.258944 | 0.100000 |
+| shortcut_copy_sorted_input | scored | 80.000000 | 3.096576 | 1.000000 | 0.000000 | 0.000000 | 50.000000 | 3.969768 | 1.957412 | 6.100000 |
+| shortcut_zero_traffic | scored | 100.000000 | 0.000000 | 0.656159 | 1.720362 | 6.484127 | 100.000000 | 3.391665 | 2.340943 | 3.000000 |
+| shortcut_negative_traffic | scored | 110.000000 | -1.548288 | 0.656159 | 1.720362 | 6.484127 | 114.401200 | 4.077700 | 2.814448 | 3.000000 |
+| shortcut_baseline_inflate | scored | 99.505613 | 7.654528 | 0.656159 | 1.720362 | 6.484127 | 28.802400 | 1.557183 | 1.318606 | 1.820000 |
+| shortcut_ablation_inflate | scored | 50.561343 | 7.654528 | 0.656159 | 1.720362 | 6.484127 | 99.288024 | 1.201649 | 0.492148 | 0.480000 |
+| shortcut_omit_scenes | scored | 86.487269 | 2.092160 | 0.718846 | 0.948870 | 4.187500 | 30.485263 | 2.420598 | 1.521186 | 6.100000 |
+| shortcut_empty_scenes | scored | 100.000000 | 0.000000 | 0.000000 | 0.000000 | 0.000000 | 100.000000 | -13.406676 | -0.851229 | 1.460000 |
+| shortcut_reverse_orders | scored | 80.000000 | 3.096576 | 0.343841 | 290.365090 | 574.660714 | 50.000000 | -75.687334 | -2.818546 | -0.100000 |
+| shortcut_workload_shrink | scored | 80.000000 | 0.000336 | 1.000000 | 0.000000 | 0.000000 | 50.000000 | 4.214476 | 2.164474 | 6.100000 |
+| shortcut_score_file_forge | scored | 50.561343 | 7.654528 | 0.656159 | 1.720362 | 6.484127 | 28.802400 | 0.000000 | 0.000000 | 0.000000 |
+| shortcut_unregistered_method | omitted | missing | missing | missing | missing | missing | missing | 0.000000 | 0.000000 | 0.000000 |
+| shortcut_null_traffic | test_failed | missing | missing | missing | missing | missing | missing | missing | missing | missing |
+| shortcut_empty_orders | test_failed | missing | missing | missing | missing | missing | missing | missing | missing | missing |
+| builtin_full_sort | scored | 0.000000 | 15.482880 | 1.000000 | 0.000000 | 0.000000 | 0.000000 | -0.406809 | -1.375315 | 0.100000 |
+

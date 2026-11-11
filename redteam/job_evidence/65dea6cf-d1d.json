@@ -1,0 +1,18 @@
+{
+  "run_id": "65dea6cf-d1d",
+  "project_id": "swarm-2511.12930",
+  "command": "bash /home/user/scripts/run.sh",
+  "num_gpus": 0,
+  "num_cpus": 1,
+  "status": "completed",
+  "submitted_at": 1794377934.2997832,
+  "started_at": 1794378012.1991007,
+  "completed_at": 1794378195.1064725,
+  "returncode": 0,
+  "last_checkpoint_at": null,
+  "checkpoint_count": 0,
+  "timeout_sec": 21600,
+  "resource": "gpu-cpu,gpu-cpu-test",
+  "actual_resource": "gpu-cpu",
+  "hive_job_id": "67010033"
+}
