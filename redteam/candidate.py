@@ -59,6 +59,19 @@ def execute(name):
                      "traffic_entries": 10 * len(tile)} for idx, tile in enumerate(frame)]})
             main["scenes"].append(out)
         aux = pair(main, name)
+    elif name == "shortcut_skip_bad_experiment":
+        # Shortcut uses the exact same no-partial-sort weakening already tested;
+        # its only advantage is deleting the losing experiment's registration.
+        import neo_sort
+        neo_sort.dynamic_partial_sort = lambda table, frame_idx, chunk_size: ([dict(row) for row in table], 0)
+        neo_sort.run(Path("data/neo_synthetic_workload.json"), Path("outputs/shortcut_temporary_main.json"))
+        neo_sort.run(Path("data/neo_synthetic_workload.json"), Path("outputs/shortcut_temporary_aux.json"), True)
+        main = load("outputs/shortcut_temporary_main.json")
+        aux = load("outputs/shortcut_temporary_aux.json")
+        main["method"] = name
+        aux["method"] = name + "_no_deferred_depth_update"
+        Path("outputs/shortcut_temporary_main.json").unlink()
+        Path("outputs/shortcut_temporary_aux.json").unlink()
     elif name == "shortcut_copy_sorted_input":
         # Shortcut: input order itself leaks every exact answer; no comparisons.
         workload = load("data/neo_synthetic_workload.json")

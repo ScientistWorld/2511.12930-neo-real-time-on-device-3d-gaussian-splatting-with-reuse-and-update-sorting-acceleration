@@ -32,5 +32,17 @@
       "bytes": 9553606,
       "sha256": "41a9dd809f2519d6d1a30e8928e2496db8f9590ba15642dd8822ecf78cb8b667"
     }
-  }
+  },
+  "test_error_tail": [
+    "  File \"/home/user/redteam/_work/shortcut_null_traffic/eval/test/evaluate.py\", line 182, in _by_scene_metrics",
+    "    return {",
+    "           ^",
+    "  File \"/home/user/redteam/_work/shortcut_null_traffic/eval/test/evaluate.py\", line 183, in <dictcomp>",
+    "    scene[\"scene\"]: _scene_metrics(scene, workload_scenes[scene[\"scene\"]])",
+    "                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "  File \"/home/user/redteam/_work/shortcut_null_traffic/eval/test/evaluate.py\", line 159, in _scene_metrics",
+    "    traffic_entries += int(tile_output[\"traffic_entries\"])",
+    "                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+  ]
 }

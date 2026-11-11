@@ -23,7 +23,8 @@ CASES = ["reference_seed101", "reference_seed102", "reference_seed103", "better_
          "shortcut_zero_traffic", "shortcut_negative_traffic", "shortcut_baseline_inflate",
          "shortcut_ablation_inflate", "shortcut_omit_scenes", "shortcut_empty_scenes",
          "shortcut_reverse_orders", "shortcut_workload_shrink", "shortcut_score_file_forge",
-         "shortcut_unregistered_method", "shortcut_null_traffic", "shortcut_empty_orders"]
+         "shortcut_unregistered_method", "shortcut_null_traffic", "shortcut_empty_orders",
+         "shortcut_skip_bad_experiment"]
 
 
 def save(path, value):
@@ -131,6 +132,13 @@ def run_case(name):
                     if key.startswith(name):
                         del experiment["results"][key]
             save(p, score)
+        if name == "shortcut_skip_bad_experiment":
+            # Shortcut: omit only the experiment where this weakened method loses.
+            # The method remains present in the other experiment's test results.
+            p = workspace / "scoring/scores_train.json"
+            score = json.loads(p.read_text())
+            del score["experiments"]["synthetic_temporal_sorting"]["results"][name]
+            save(p, score)
         # This is the boundary where the gym restores its own eval/test and shell.
         for relative in ("scripts/evaluate_test.sh", "eval/test/evaluate.py"):
             copy_file(relative, workspace)
@@ -151,6 +159,9 @@ def run_case(name):
         info["post_candidate_workload_sha256"] = hashlib.sha256((workspace / "data/neo_synthetic_workload.json").read_bytes()).hexdigest()
         info["artifacts"] = {p.name: {"bytes": p.stat().st_size, "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
                              for p in (workspace / "outputs").glob("*.json")}
+        if info["test"]["returncode"]:
+            log.flush()
+            info["test_error_tail"] = (dest / "run.log").read_text().splitlines()[-10:]
         save(dest / "run_status.json", info)
     # Keep scores and code, not a giant duplicate agent-visible environment.
     shutil.rmtree(workspace)

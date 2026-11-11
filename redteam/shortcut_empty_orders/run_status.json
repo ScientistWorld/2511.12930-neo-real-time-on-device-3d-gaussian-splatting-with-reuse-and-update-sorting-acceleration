@@ -32,5 +32,17 @@
       "bytes": 41328,
       "sha256": "43185ac55c1fc1d5d6515001c4875fd1881384ae334c1c05a43ae957f8a28a20"
     }
-  }
+  },
+  "test_error_tail": [
+    "           ^",
+    "  File \"/home/user/redteam/_work/shortcut_empty_orders/eval/test/evaluate.py\", line 183, in <dictcomp>",
+    "    scene[\"scene\"]: _scene_metrics(scene, workload_scenes[scene[\"scene\"]])",
+    "                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "  File \"/home/user/redteam/_work/shortcut_empty_orders/eval/test/evaluate.py\", line 156, in _scene_metrics",
+    "    metrics = _rank_error_metrics(tile_output[\"predicted_order\"], current_tile)",
+    "              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "  File \"/home/user/redteam/_work/shortcut_empty_orders/eval/test/evaluate.py\", line 72, in _rank_error_metrics",
+    "    raise ValueError(f\"Predicted order does not match tile membership: missing={len(missing)} extra={len(extra)}\")",
+    "ValueError: Predicted order does not match tile membership: missing=512 extra=0"
+  ]
 }

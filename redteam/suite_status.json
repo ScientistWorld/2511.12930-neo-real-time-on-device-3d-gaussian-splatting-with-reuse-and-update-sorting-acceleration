@@ -18,7 +18,8 @@
     "shortcut_score_file_forge",
     "shortcut_unregistered_method",
     "shortcut_null_traffic",
-    "shortcut_empty_orders"
+    "shortcut_empty_orders",
+    "shortcut_skip_bad_experiment"
   ],
   "harness_failures": {}
 }
