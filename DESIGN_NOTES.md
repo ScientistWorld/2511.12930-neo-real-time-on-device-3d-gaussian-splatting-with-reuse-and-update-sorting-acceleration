@@ -1,3 +1,5 @@
+> **Superseded (iteration 11).** This file describes the earlier artifact-based gym (methods wrote per-tile orders and traffic to `outputs/`, scored by `eval/evaluate_sorting.py`). The gym now runs methods through an evaluator-owned sorting-engine protocol; see `briefing/evaluation.md` and `HARDENING.md`.
+
 # Train/Test Evaluation Design Notes
 
 ## Checked

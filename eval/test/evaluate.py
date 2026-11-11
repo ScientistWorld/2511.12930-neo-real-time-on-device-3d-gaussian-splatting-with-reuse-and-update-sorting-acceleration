@@ -121,7 +121,11 @@ RANGES = {
     "psnr_drop_db": (0.0, 10.0),
     "mean_abs_rank_error": (0.0, 500.0),
 }
-WORST = {"traffic_reduction_pct": -100.0, "psnr_drop_db": 10.0, "mean_abs_rank_error": 500.0}
+# Worst value of each metric, given to every metric of every experiment of a failed
+# run.  A run whose psnr_drop_db exceeds the experiment's quality limit fails, so
+# the limit is the worst psnr_drop_db a scored run can have.
+WORST = {exp: {"traffic_reduction_pct": -100.0, "psnr_drop_db": GATE_MAX_PSNR_DROP_DB[exp],
+               "mean_abs_rank_error": 500.0} for exp in EXPERIMENTS}
 RESPONSE_TIMEOUT_S = 120.0
 # Total time a method may spend answering over one scene (30 frames).  The
 # reference answers in milliseconds; this only stops a method from stalling
@@ -945,7 +949,7 @@ def evaluate(policy_dir: Path, output: Path, diagnostics: Path, log_dir: Path, w
     for exp_name in EXPERIMENTS:
         results = {}
         for name in names:
-            results[name] = dict(WORST) if name in failures else scored[exp_name][name]
+            results[name] = dict(WORST[exp_name]) if name in failures else scored[exp_name][name]
         experiments[exp_name] = {"results": results}
     scores = {
         "_metadata": {

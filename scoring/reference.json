@@ -1,11 +1,43 @@
 {
   "_note": "Paper: Neo (arXiv 2511.12930, ASPLOS'26). The paper reports end-to-end DRAM traffic of a cycle-accurate simulator on trained Tanks-and-Temples scenes (QHD, 60 frames) and PSNR/LPIPS against ground-truth photos. This gym measures the same quantities on procedurally generated Gaussian scenes with an evaluator-owned sorting-engine memory model: traffic of the sorting stage relative to an exact full re-sort on the same engine, and the PSNR drop that the ordering error causes at the paper's mean reconstruction PSNR (26.87 dB, Table 2). Paper numbers that are not on this scale are kept under _paper_reported.",
   "_paper_reported": {
-    "qhd_60_frame_dram_traffic_GB": {"orin_agx": 346.5, "gscore": 104.6, "neo": 19.6, "reduction_vs_gscore_pct": 81.3, "reduction_vs_orin_pct": 94.4},
-    "table2_psnr_db": {"original_3dgs": [28.2, 28.9, 28.0, 26.0, 25.1, 25.0], "neo": [28.1, 28.9, 27.9, 26.0, 25.0, 24.9], "mean_drop_db": 0.067, "max_drop_db": 0.1},
+    "qhd_60_frame_dram_traffic_GB": {
+      "orin_agx": 346.5,
+      "gscore": 104.6,
+      "neo": 19.6,
+      "reduction_vs_gscore_pct": 81.3,
+      "reduction_vs_orin_pct": 94.4
+    },
+    "table2_psnr_db": {
+      "original_3dgs": [
+        28.2,
+        28.9,
+        28.0,
+        26.0,
+        25.1,
+        25.0
+      ],
+      "neo": [
+        28.1,
+        28.9,
+        27.9,
+        26.0,
+        25.0,
+        24.9
+      ],
+      "mean_drop_db": 0.067,
+      "max_drop_db": 0.1
+    },
     "table2_lpips_max_increase": 0.001,
-    "deferred_depth_update": {"neo_sorting_engine_only_traffic_reduction_vs_gscore_pct": 71.1, "further_reduction_from_rasterization_engine_pct": 35.8, "traffic_increase_without_deferred_update_pct": 33.2},
-    "temporal_similarity": {"tiles_retaining_over_78pct_of_gaussians": 0.9, "p99_sort_order_shift_positions": 31},
+    "deferred_depth_update": {
+      "neo_sorting_engine_only_traffic_reduction_vs_gscore_pct": 71.1,
+      "further_reduction_from_rasterization_engine_pct": 35.8,
+      "traffic_increase_without_deferred_update_pct": 33.2
+    },
+    "temporal_similarity": {
+      "tiles_retaining_over_78pct_of_gaussians": 0.9,
+      "p99_sort_order_shift_positions": 31
+    },
     "rapid_camera_movement": "Fig. 17b: at 2x-16x camera speed Neo stays above 60 FPS; no traffic or quality numbers are reported.",
     "removed_from_results_in_iteration_11": "Earlier versions listed pair_order_accuracy 0.999, mean_abs_rank_error 0.1 and p99_abs_rank_error 31.0 as Neo results. The paper reports none of these for Neo (31 is the frame-to-frame order shift of Fig. 7), so they are not used as reference values."
   },
@@ -22,12 +54,12 @@
         },
         "psnr_drop_db": {
           "higher_is_better": false,
-          "coefficient": 1.0,
-          "description": "PSNR drop caused by blending in the method's order instead of exact depth order, at the paper's mean reconstruction PSNR of 26.87 dB (10*log10(1 + MSE_order / MSE_recon)); mean over scenes. Runs above 0.1 dB (the paper's quality claim) fail."
+          "coefficient": 0.3,
+          "description": "PSNR drop caused by blending in the method's order instead of exact depth order, at the paper's mean reconstruction PSNR of 26.87 dB (10*log10(1 + MSE_order / MSE_recon)); mean over scenes. Runs above 0.1 dB (the paper's quality claim) fail; failed runs receive 0.1."
         },
         "mean_abs_rank_error": {
           "higher_is_better": false,
-          "coefficient": 0.25,
+          "coefficient": 0.1,
           "description": "Mean absolute displacement (table positions) of each Gaussian from its exact depth rank in its tile; Gaussians missing from the table count as placed after all rendered ones."
         }
       },
@@ -43,13 +75,14 @@
           "traffic_reduction_pct": 81.3,
           "psnr_drop_db": 0.067
         }
-      }
+      },
+      "_results_note": "neo_reuse_update values are the paper's: 81.3% is end-to-end QHD DRAM traffic saved versus GSCore (Fig. 16) and 0.067 dB the mean Table 2 PSNR drop. The gym measures sorting-stage table traffic versus an exact full re-sort on a scaled synthetic setup (reference on the hidden test: 68.0% and 0.018 dB), so these are context, not values to match."
     },
     "rapid_camera_motion": {
       "description": "Paper's rapid-camera-movement study (Fig. 17b) at twice the normal camera speed: lower Gaussian retention per tile and larger depth changes between frames. Same benefit and constraint as the main setting; this is where reuse-based ordering degrades.",
       "weight": 0.4,
       "primary_metric": "traffic_reduction_pct",
-      "_results_note": "The paper reports only throughput under rapid motion. The neo_reuse_update values below are this gym's measured reference on the hidden test scenes (not paper numbers); full_sort is exact by construction.",
+      "_results_note": "The paper reports only throughput under rapid camera motion (Fig. 17b), no traffic or quality numbers. The neo_reuse_update values here are this gym's measured reference on the hidden test scenes (iteration 11), not paper numbers.",
       "metrics": {
         "traffic_reduction_pct": {
           "higher_is_better": true,
@@ -58,12 +91,12 @@
         },
         "psnr_drop_db": {
           "higher_is_better": false,
-          "coefficient": 1.0,
-          "description": "PSNR drop caused by ordering error at the paper's mean reconstruction PSNR (26.87 dB); mean over scenes. Runs above 1.0 dB fail."
+          "coefficient": 0.6,
+          "description": "PSNR drop caused by ordering error at the paper's mean reconstruction PSNR (26.87 dB); mean over scenes. Runs above 1.0 dB fail; failed runs receive 1.0."
         },
         "mean_abs_rank_error": {
           "higher_is_better": false,
-          "coefficient": 0.25,
+          "coefficient": 0.1,
           "description": "Mean absolute displacement of each Gaussian from its exact depth rank in its tile."
         }
       },
@@ -76,11 +109,12 @@
         },
         "neo_reuse_update": {
           "type": "proposed",
-          "traffic_reduction_pct": 0.0,
-          "psnr_drop_db": 0.0,
-          "mean_abs_rank_error": 0.0
+          "traffic_reduction_pct": 43.4873,
+          "psnr_drop_db": 0.1594,
+          "mean_abs_rank_error": 22.8109
         }
       }
     }
-  }
+  },
+  "_coefficient_note": "Iteration 11: traffic is the paper's benefit and the image-quality loss its constraint (gated at 0.1 dB / 1.0 dB). In each experiment the traffic coefficient exceeds the sum of the quality coefficients, so an exact full re-sort (no traffic saved, no quality loss) cannot outrank the reference even when only two attempts are normalised together. psnr_drop_db counts more under rapid motion (0.6) than under normal motion (0.3), because the reference's degradation is imperceptible (< 0.1 dB) in the normal setting but visible under rapid motion. mean_abs_rank_error (not reported by the paper) only diagnoses ordering fidelity (0.1). Previously 1.0 / 1.0 / 0.25 in both experiments."
 }

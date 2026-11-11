@@ -53,7 +53,7 @@ Computed by the evaluator over every frame and tile of every scene of an experim
 
 ## Constraints and failure
 
-A run fails if it breaks the protocol or if `psnr_drop_db` exceeds 0.1 dB in `synthetic_temporal_sorting` (the paper reports at most 0.1 dB) or 1.0 dB in `rapid_camera_motion`. A failed run receives the worst value of every metric in every experiment: `traffic_reduction_pct` = -100, `psnr_drop_db` = 10, `mean_abs_rank_error` = 500. All metrics are clipped to these ranges.
+A run fails if it breaks the protocol or if `psnr_drop_db` exceeds 0.1 dB in `synthetic_temporal_sorting` (the paper reports at most 0.1 dB) or 1.0 dB in `rapid_camera_motion`. A failed run receives the worst value of every metric in every experiment: `traffic_reduction_pct` = -100, `psnr_drop_db` = the experiment's quality limit (0.1 or 1.0 dB, the worst value a passing run can have), `mean_abs_rank_error` = 500. `traffic_reduction_pct` and `mean_abs_rank_error` are clipped to [-100, 100] and [0, 500].
 
 ## Splits
 

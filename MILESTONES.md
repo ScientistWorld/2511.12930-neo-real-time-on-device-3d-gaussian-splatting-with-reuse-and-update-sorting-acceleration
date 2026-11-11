@@ -46,5 +46,10 @@
 - Final verifier tightened strict method-agnostic wording in `briefing/evaluation.md`, `scoring/EXPERIMENTS.md`, and `scoring/DIRECTION.md`.
 - Confirmed the milestone remains `core_claim_plus`; no scoring or implementation downgrade was found.
 
+### [2026-11-11] - core_claim_plus (iteration 11, hardening)
+- Rebuilt the gym around an evaluator-owned sorting-engine protocol: the evaluator generates the scenes, executes each method's operations on its own memory model, counts traffic and measures rendered-image quality (PSNR drop, gated at the paper's 0.1 dB). This closes every shortcut in REDTEAM.md.
+- Added the paper's rapid-camera-motion study as a scored experiment; fixed evaluator-abort and stall shortcuts; re-set the metric coefficients so brute force cannot outrank the reference.
+- Hidden test: the reference saves 68.0% of sorting traffic at 0.018 dB PSNR drop (normal motion) and 43.5% at 0.159 dB (2x motion); the deferred depth update saves 40.0% / 31.0% (paper: 33.2-35.8%). Details in HARDENING.md.
+
 ## Stop Justification
 - Completed at milestone `core_claim_plus`.
