@@ -14,7 +14,7 @@ A method may use only what the protocol sends (tile counts and rasterizer feedba
 
 ## Quality
 
-A run fails, and receives the worst value of every metric, if its rendering-quality loss exceeds 0.1 dB PSNR under normal motion or 1.0 dB under rapid motion, or if it breaks the protocol.
+A run fails, and receives the worst value of every metric, if its rendering-quality loss exceeds 0.1 dB PSNR under normal motion or 1.0 dB under rapid motion, or if it breaks the protocol (including crashes and exceeding 120 s per response or 600 s of response time per scene).
 
 ## Compliance Checklist
 

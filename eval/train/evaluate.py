@@ -50,8 +50,8 @@ Operations (executed in order, costs in 8-byte table-entry accesses)
 
 Scored per experiment: traffic_reduction_pct versus full_sort (higher is
 better), psnr_drop_db of the rendering (lower is better) and
-mean_abs_rank_error (lower is better).  A crash, timeout, malformed response,
-illegal operation, missing scene or a psnr_drop_db above the experiment's
+mean_abs_rank_error (lower is better).  A crash, timeout (120 s per response,
+600 s per scene), malformed response, illegal operation, missing scene or a psnr_drop_db above the experiment's
 quality limit fails the method, which then receives the worst value of every
 metric in every experiment.
 """
@@ -124,6 +124,10 @@ RANGES = {
 }
 WORST = {"traffic_reduction_pct": -100.0, "psnr_drop_db": 10.0, "mean_abs_rank_error": 500.0}
 RESPONSE_TIMEOUT_S = 120.0
+# Total time a method may spend answering over one scene (30 frames).  The
+# reference answers in milliseconds; this only stops a method from stalling
+# the evaluation until the job is killed and no score is written at all.
+SCENE_BUDGET_S = 600.0
 MAX_RESPONSE_BYTES = 32 * 1024 * 1024
 
 # ---------------------------------------------------------------------------
@@ -588,6 +592,7 @@ class SubprocessPolicy:
         self.proc = None
         self.buf = b""
         self.log = None
+        self.spent = 0.0
 
     def start(self, header: dict, scene_label: str) -> None:
         self.log_dir.mkdir(parents=True, exist_ok=True)
@@ -603,6 +608,7 @@ class SubprocessPolicy:
         except OSError as exc:
             raise PolicyFailure(f"could not start policy command: {exc}") from exc
         self.buf = b""
+        self.spent = 0.0
         self._send({"type": "scene", **header})
 
     def _send(self, obj: dict) -> None:
@@ -625,24 +631,29 @@ class SubprocessPolicy:
 
     def _recv(self) -> dict:
         fd = self.proc.stdout.fileno()
-        deadline = time.monotonic() + RESPONSE_TIMEOUT_S
-        while b"\n" not in self.buf:
-            remaining = deadline - time.monotonic()
-            if remaining <= 0:
-                raise PolicyFailure(f"no response within {RESPONSE_TIMEOUT_S} s")
-            readable, _, _ = select.select([fd], [], [], remaining)
-            if not readable:
-                continue
-            chunk = os.read(fd, 1 << 16)
-            if not chunk:
-                raise PolicyFailure(f"policy exited (code {self.proc.poll()})")
-            self.buf += chunk
-            if len(self.buf) > MAX_RESPONSE_BYTES:
-                raise PolicyFailure("response exceeds size limit")
+        t_start = time.monotonic()
+        deadline = t_start + min(RESPONSE_TIMEOUT_S, max(SCENE_BUDGET_S - self.spent, 0.0))
+        try:
+            while b"\n" not in self.buf:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise PolicyFailure(f"no response within {RESPONSE_TIMEOUT_S} s or the "
+                                        f"{SCENE_BUDGET_S} s per-scene budget is used up")
+                readable, _, _ = select.select([fd], [], [], remaining)
+                if not readable:
+                    continue
+                chunk = os.read(fd, 1 << 16)
+                if not chunk:
+                    raise PolicyFailure(f"policy exited (code {self.proc.poll()})")
+                self.buf += chunk
+                if len(self.buf) > MAX_RESPONSE_BYTES:
+                    raise PolicyFailure("response exceeds size limit")
+        finally:
+            self.spent += time.monotonic() - t_start
         line, _, self.buf = self.buf.partition(b"\n")
         try:
             msg = json.loads(line)
-        except ValueError as exc:
+        except (ValueError, RecursionError) as exc:
             raise PolicyFailure("response is not valid JSON") from exc
         if not isinstance(msg, dict):
             raise PolicyFailure("response must be a JSON object")
@@ -723,7 +734,7 @@ def run_scene(scene_seed: int, speed: float, scene_label: str, runners: dict, fa
             continue
         try:
             runner.start(header, scene_label)
-        except PolicyFailure as exc:
+        except Exception as exc:
             failures[name] = f"{scene_label}: {exc}"
             runner.stop()
             continue
@@ -795,6 +806,11 @@ def run_scene(scene_seed: int, speed: float, scene_label: str, runners: dict, fa
                     st["fit"][k] = fit
             except (ProtocolError, PolicyFailure) as exc:
                 failures[name] = f"{scene_label} frame {frame}: {exc}"
+                runner.stop()
+            except Exception as exc:  # anything a malformed response triggers fails that method only
+                if isinstance(runner, BuiltinFullSort):
+                    raise
+                failures[name] = f"{scene_label} frame {frame}: {type(exc).__name__}: {exc}"
                 runner.stop()
     for name in state:
         runners[name].stop()

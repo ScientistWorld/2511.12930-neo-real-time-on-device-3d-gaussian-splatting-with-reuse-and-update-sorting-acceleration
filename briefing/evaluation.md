@@ -41,7 +41,7 @@ Frame 0 is not sent: every method starts from the same exactly sorted tables. Pe
 | same with `"merge": true` (whole table, once per frame; optional `"scale"` > 0 and `"offset"`) | incoming Gaussians, sorted by current depth, are merged into the outgoing stream comparing `stored_depth` with `scale * incoming_depth + offset`; invalid entries are dropped | `L + I` reads + `L'` writes, plus extra passes to sort more than `capacity` incoming entries |
 | `{"op": "merge_runs", "start": a, "end": b, "cuts": [...]}` | merges at most `merge_fanin` consecutive runs | `2 (b - a)` |
 
-After the operations the rasterizer blends the tile in table order (entries not overlapping the tile are skipped; Gaussians missing from the table are not drawn) and writes current depths and valid bits back into the table at no extra cost. Malformed responses, illegal operations, crashes or more than 120 s without a response fail the method.
+After the operations the rasterizer blends the tile in table order (entries not overlapping the tile are skipped; Gaussians missing from the table are not drawn) and writes current depths and valid bits back into the table at no extra cost. Malformed responses, illegal operations, crashes, more than 120 s without a response, or more than 600 s of total response time over one scene fail the method.
 
 ## Metrics
 
