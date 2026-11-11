@@ -2,16 +2,16 @@
 
 ## Research Problem
 
-This benchmark focuses on reducing memory traffic for depth sorting in temporally adjacent 3D Gaussian Splatting frames while preserving the ordering quality needed for rendering.
+Keep per-tile Gaussian depth order correct across consecutive frames of a 3D Gaussian Splatting renderer while minimizing sorting-stage DRAM traffic on a sorting engine with a small on-chip buffer.
 
 ## Core Contribution
 
-The research direction is to maintain useful per-tile Gaussian depth order across related frames while substantially reducing table-entry memory traffic. Improvements should remain in this problem family: hardware-aware ordering maintenance for 3D Gaussian Splatting workloads with explicit traffic accounting.
+Exploit temporal similarity between frames so that most of the per-frame sorting work and memory traffic of a full re-sort can be avoided without visible change in the rendered image.
 
 ## Approach Scope
 
-Candidates may change the ordering-maintenance policy, update granularity, membership bookkeeping, metadata policy, or hardware-friendly traffic model. The artifact contract must stay comparable: each run should emit per-frame per-tile orders and enough traffic accounting for the reusable evaluator to score the same metrics.
+Within the fixed hardware model, a method may change anything about which operations run and when: how tables are reused or rebuilt, how and where they are reordered, how many passes and over which ranges, when stored depths are refreshed, how incoming Gaussians are inserted, and how all of this adapts to the per-tile counts and rasterizer feedback. Improvements can come from lower traffic at equal quality, from better quality at equal traffic, or from staying robust when the camera moves fast.
 
 ## Out of Bounds
 
-Replacing the task with full sorting on more powerful hardware is out of scope. Ignoring ordering quality to reduce traffic is out of scope. Changing the workload so fewer Gaussians need sorting is out of scope for the existing experiment key. Image-space reuse, pruning, quantization, or retraining-only methods are out of scope unless they still solve the same per-tile depth-ordering problem and report comparable traffic.
+Changing the hardware model, the operation costs, the scenes, the frame count, the baseline or the quality limits; obtaining hidden scene data; trading visible image quality beyond the stated limits for traffic.

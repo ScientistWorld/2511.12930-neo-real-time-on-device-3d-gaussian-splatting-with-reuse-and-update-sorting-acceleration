@@ -1,18 +1,11 @@
 #!/bin/bash
-# Reproduce the paper's results end-to-end.
+# Reproduce the paper's results end to end (inside the container, no internet).
 #
-# This script runs inside the compute container and should call
-# scripts/baseline.sh and scripts/method.sh to run baselines and
-# the paper's method, each of which calls scripts/evaluate.sh.
-#
-# Assumes:
-#   - Container is built (environment/container.sif)
-#   - Data and models are downloaded (via scripts/download.sh)
-#   - Working directory can be anywhere inside the cloned repo
-#
-# This is the "gold standard" reproduction — 
-# You do not need to run this, but keep this in good shape
-# so other agents can easily run a full loop of reproduction and get the paper's numbers.
+# The method needs no training. Every registered method (policies/) and the
+# built-in full-sort baseline are run on the visible train scenes
+# (scoring/scores_train.json, mirrored to scoring/scores.json) and on the
+# held-out test scenes (scoring/scores_test.json), then the workspace is
+# validated.
 
 set -e
 
@@ -20,6 +13,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
 
-bash scripts/baseline.sh
-bash scripts/method.sh
-python validate.py --compare
+bash scripts/evaluate_train.sh
+cp scoring/scores_train.json scoring/scores.json
+cp scoring/diagnostics_train.json scoring/diagnostics.json
+bash scripts/evaluate_test.sh
+python3 validate.py --compare

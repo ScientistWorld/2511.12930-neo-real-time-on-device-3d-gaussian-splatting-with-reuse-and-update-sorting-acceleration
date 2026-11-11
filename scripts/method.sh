@@ -1,9 +1,10 @@
 #!/bin/bash
-# Run the paper's proposed method.
+# Run the paper's proposed method (Neo reuse-and-update sorting).
 #
-# This script trains/runs the paper's method using code in method/.
+# The method is the sorting-engine policy method/neo_policy.py, registered by
+# policies/neo_reuse_update.json. It needs no training: the evaluator runs it
+# frame by frame on every scene, so "running the method" means scoring it.
 #
-# Usage:
 #   bash scripts/method.sh
 
 set -e
@@ -12,23 +13,5 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
 
-mkdir -p data outputs
-
-if [ ! -e data/neo_synthetic_workload.json ]; then
-  python data/synthetic_workload.py --output data/neo_synthetic_workload.json
-fi
-
-python method/neo_sort.py \
-  --workload data/neo_synthetic_workload.json \
-  --output outputs/neo_reuse_update.json
-
-python method/neo_sort.py \
-  --workload data/neo_synthetic_workload.json \
-  --output outputs/neo_no_deferred_depth_update.json \
-  --separate-depth-refresh
-
-if [ ! -e outputs/full_sort.json ]; then
-  bash scripts/baseline.sh
-fi
-
+test -f policies/neo_reuse_update.json
 bash scripts/evaluate.sh

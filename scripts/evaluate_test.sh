@@ -1,13 +1,13 @@
 #!/bin/bash
-# Evaluate the held-out test slice of the Neo sorting gym.
+# Score every method registered in policies/ on the hidden test scenes.
 #
-# Mirrors scripts/evaluate.sh argument shape:
-#   ./scripts/evaluate_test.sh [candidate_output] [baseline_output] [scores_output]
+#   bash scripts/evaluate_test.sh [policy_dir] [scores_output]
 #
-# With no candidate_output, this scores the same method entries found in
-# scoring/scores_train.json when that file exists; otherwise it discovers every
-# compatible artifact under outputs/. The output is always scores_test.json by
-# default and the Python path is eval/test/.
+# With no arguments every manifest policies/<name>.json is run through the
+# sorting-engine protocol of eval/test/evaluate.py (same interface as the
+# train evaluator, held-out scenes generated inside eval/test/), together
+# with the built-in full_sort baseline. Scores go to scoring/scores_test.json.
+# Nothing a method writes is read back: all numbers are recomputed here.
 
 set -e
 
@@ -15,21 +15,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
 
-mkdir -p scoring
+POLICY_DIR="${1:-policies}"
+SCORES_OUTPUT="${2:-scoring/scores_test.json}"
 
-CANDIDATE_OUTPUT="${1:-}"
-BASELINE_OUTPUT="${2:-}"
-SCORES_OUTPUT="${3:-scoring/scores_test.json}"
-TRAIN_SCORES="${TRAIN_SCORES:-scoring/scores_train.json}"
-
-ARGS=(--output "$SCORES_OUTPUT")
-if [[ -n "$CANDIDATE_OUTPUT" ]]; then
-  ARGS+=(--candidate "$CANDIDATE_OUTPUT")
-elif [[ -f "$TRAIN_SCORES" ]]; then
-  ARGS+=(--methods-from-train "$TRAIN_SCORES")
-fi
-if [[ -n "$BASELINE_OUTPUT" ]]; then
-  ARGS+=(--baseline "$BASELINE_OUTPUT")
-fi
-
-python eval/test/evaluate.py "${ARGS[@]}"
+python3 eval/test/evaluate.py --policy-dir "$POLICY_DIR" --output "$SCORES_OUTPUT"

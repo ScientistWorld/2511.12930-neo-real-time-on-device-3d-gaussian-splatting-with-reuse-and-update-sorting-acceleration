@@ -1,15 +1,60 @@
 # Evaluation
 
+## How a method is run
+
+A method is a program registered by a manifest `policies/<name>.json`:
+
+```json
+{"command": ["python3", "path/to/your_policy.py", "--any", "args"]}
+```
+
+Every manifest in `policies/` is scored; `full_sort` is reserved for the built-in baseline. The evaluator generates the scenes itself, starts the command once per scene (working directory = repository root) and drives it frame by frame over JSON lines on stdin/stdout (flush after every line). The method never sees Gaussian ids, depths or orders. It decides which operations the sorting engine performs; the evaluator executes them on its own memory model, counts the DRAM traffic, rasterizes each tile in the resulting order and compares the image with the exactly sorted one. Nothing the method writes to disk is read.
+
+### Messages
+
+```
+-> {"type": "scene", "tiles_x": 12, "tiles_y": 7, "capacity": 256, "merge_fanin": 2,
+    "feedback_block": 64, "max_ops_per_tile": 128}
+-> {"type": "frame", "frame": t, "tiles": [info, ...]}      t = 1, 2, ...
+<- {"ops": [[op, ...], ...]}                                  one op list per tile
+-> {"type": "end"}
+```
+
+Frame 0 is not sent: every method starts from the same exactly sorted tables. Per tile, `info` holds:
+
+| field | meaning |
+|---|---|
+| `N` | Gaussians overlapping the tile in this frame |
+| `L` | entries in the stored table |
+| `I` | incoming Gaussians: in the tile now, not valid in the table |
+| `X` | invalid entries (left the tile in the previous frame) |
+| `inv` | depth inversions the rasterizer met in each block of `feedback_block` table positions in the previous frame |
+| `depth_fit` | `[a, b]`, least-squares fit `new_depth = a * stored_depth + b` over reused entries at the previous frame's depth write-back |
+
+### Operations and their DRAM cost (in 8-byte table entries)
+
+| op | effect | cost |
+|---|---|---|
+| `{"op": "regen"}` (first op only) | preprocessing rewrites the tile table from scratch: current Gaussians, current depths, Gaussian-id order (unsorted) | `N` writes, replacing the `I` writes of the incoming table that are charged otherwise |
+| `{"op": "pass", "start": a, "end": b, "cuts": [...], "sort": true}` | one streaming pass over `table[a:b]`; each segment between consecutive cuts is sorted on chip by stored depth (at most `capacity` entries per segment) | `2 (b - a)` |
+| same with `"refresh": true` | stored depths in `[a, b)` are first replaced by current depths | `+ (b - a)` random reads |
+| same with `"merge": true` (whole table, once per frame; optional `"scale"` > 0 and `"offset"`) | incoming Gaussians, sorted by current depth, are merged into the outgoing stream comparing `stored_depth` with `scale * incoming_depth + offset`; invalid entries are dropped | `L + I` reads + `L'` writes, plus extra passes to sort more than `capacity` incoming entries |
+| `{"op": "merge_runs", "start": a, "end": b, "cuts": [...]}` | merges at most `merge_fanin` consecutive runs | `2 (b - a)` |
+
+After the operations the rasterizer blends the tile in table order (entries not overlapping the tile are skipped; Gaussians missing from the table are not drawn) and writes current depths and valid bits back into the table at no extra cost. Malformed responses, illegal operations, crashes or more than 120 s without a response fail the method.
+
 ## Metrics
 
-The benchmark measures memory traffic and ordering quality over a deterministic temporal sequence of per-tile Gaussian tables.
+Computed by the evaluator over every frame and tile of every scene of an experiment:
 
-`traffic_MB` estimates table-entry memory traffic; lower is better. `traffic_reduction_pct` compares a candidate against full per-frame sorting; higher is better. `pair_order_accuracy` checks deterministic broad pair relationships in each output order against exact depth-sorted order; higher is better. `adjacent_pair_accuracy` and `sampled_pair_order_accuracy` add local and odd-offset ordering checks. `mean_abs_rank_error` and `p99_abs_rank_error` measure displacement from exact depth rank; lower is better.
+- `traffic_reduction_pct` (higher is better): sorting-stage table traffic saved relative to the built-in `full_sort` baseline, which rewrites and fully re-sorts every tile every frame (256-entry on-chip chunks, then two-way merge passes) on the same scenes.
+- `psnr_drop_db` (lower is better): sampled pixels of every tile are rendered in the method's order and in exact depth order; the squared error is expressed as the PSNR drop it would cause at the paper's mean reconstruction PSNR of 26.87 dB, `10 log10(1 + MSE_order / MSE_recon)`, averaged over scenes.
+- `mean_abs_rank_error` (lower is better): mean displacement of each Gaussian from its exact depth rank in its tile.
 
-## Baselines and Targets
+## Constraints and failure
 
-The reference baseline is full sorting of each tile at each frame, which has perfect ordering but high memory traffic. The published QHD, 60-frame reference point reports 104.6 GB for full sorting and 19.6 GB for the target result, an 81.3% reduction, while image-quality changes remain under 0.1 dB PSNR and 0.001 LPIPS. This reproduction uses ordering-quality proxies instead of image PSNR because trained 3DGS scene checkpoints are not released.
+A run fails if it breaks the protocol or if `psnr_drop_db` exceeds 0.1 dB in `synthetic_temporal_sorting` (the paper reports at most 0.1 dB) or 1.0 dB in `rapid_camera_motion`. A failed run receives the worst value of every metric in every experiment: `traffic_reduction_pct` = -100, `psnr_drop_db` = 10, `mean_abs_rank_error` = 500. All metrics are clipped to these ranges.
 
-## Evaluation Protocol
+## Splits
 
-Run `bash scripts/reproduce.sh` to generate the deterministic workload, produce the full-sort baseline artifact, produce candidate artifacts, and write `scoring/scores.json`. Evaluation code in `eval/` reads per-tile predicted-order artifacts under `outputs/`, recomputes ordering quality against the workload, and must not import candidate method code. Workload generation uses a fixed seed and three temporal settings: high-retention, moderate-retention, and rapid-motion.
+`bash scripts/evaluate_train.sh` scores every registered method on the visible scenes generated by `eval/train/evaluate.py` and writes `scoring/scores_train.json` (per-scene details in `scoring/diagnostics_train.json`). `bash scripts/evaluate_test.sh` does the same on held-out scenes of the same generator family through the identical interface. Scenes are procedurally generated street-like 3D Gaussian scenes viewed by a pinhole camera (768x448 px, 64x64-px tiles) along a smooth handheld walking trajectory at 30 FPS; 30 frames are scored per scene. Everything is deterministic.

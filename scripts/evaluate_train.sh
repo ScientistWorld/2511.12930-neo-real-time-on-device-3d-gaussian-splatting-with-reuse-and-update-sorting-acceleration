@@ -1,12 +1,12 @@
 #!/bin/bash
-# Evaluate the visible train slice of the Neo sorting gym.
+# Score every method registered in policies/ on the visible train scenes.
 #
-# Mirrors scripts/evaluate.sh argument shape:
-#   ./scripts/evaluate_train.sh [candidate_output] [baseline_output] [scores_output]
+#   bash scripts/evaluate_train.sh [policy_dir] [scores_output]
 #
-# With no candidate_output, every compatible artifact under outputs/ is
-# discovered and scored. This keeps the evaluator method-agnostic for future
-# variants while preserving the original artifact interface.
+# With no arguments every manifest policies/<name>.json is run through the
+# sorting-engine protocol of eval/train/evaluate.py, together with the
+# evaluator's built-in full_sort baseline, and the scores are written to
+# scoring/scores_train.json (per-scene diagnostics: scoring/diagnostics_train.json).
 
 set -e
 
@@ -14,18 +14,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
 
-mkdir -p scoring
+POLICY_DIR="${1:-policies}"
+SCORES_OUTPUT="${2:-scoring/scores_train.json}"
 
-CANDIDATE_OUTPUT="${1:-}"
-BASELINE_OUTPUT="${2:-}"
-SCORES_OUTPUT="${3:-scoring/scores_train.json}"
-
-ARGS=(--output "$SCORES_OUTPUT")
-if [[ -n "$CANDIDATE_OUTPUT" ]]; then
-  ARGS+=(--candidate "$CANDIDATE_OUTPUT")
-fi
-if [[ -n "$BASELINE_OUTPUT" ]]; then
-  ARGS+=(--baseline "$BASELINE_OUTPUT")
-fi
-
-python eval/train/evaluate.py "${ARGS[@]}"
+python3 eval/train/evaluate.py --policy-dir "$POLICY_DIR" --output "$SCORES_OUTPUT"
