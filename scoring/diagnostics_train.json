@@ -2,7 +2,7 @@
   "_metadata": {
     "split": "train",
     "failed_methods": {},
-    "elapsed_s": 418.9
+    "elapsed_s": 432.8
   },
   "experiments": {
     "synthetic_temporal_sorting": {

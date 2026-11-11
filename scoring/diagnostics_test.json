@@ -1,0 +1,157 @@
+{
+  "_metadata": {
+    "split": "test",
+    "failed_methods": {},
+    "elapsed_s": 434.0
+  },
+  "experiments": {
+    "synthetic_temporal_sorting": {
+      "full_sort": {
+        "traffic_MB": 1605.899752,
+        "baseline_traffic_MB": 1605.899752,
+        "traffic_MB_without_deferred_depth_update": 1605.899752,
+        "deferred_depth_update_savings_pct": 0.0,
+        "per_scene": {
+          "synthetic_temporal_sorting.scene0": {
+            "traffic_reduction_pct": 0.0,
+            "psnr_drop_db": 0.0,
+            "mean_abs_rank_error": 0.0,
+            "mean_table_entries": 1808.6281746031746,
+            "mean_incoming_entries": 317.9190476190476
+          },
+          "synthetic_temporal_sorting.scene1": {
+            "traffic_reduction_pct": 0.0,
+            "psnr_drop_db": 0.0,
+            "mean_abs_rank_error": 0.0,
+            "mean_table_entries": 1841.3662698412697,
+            "mean_incoming_entries": 202.63650793650794
+          },
+          "synthetic_temporal_sorting.scene2": {
+            "traffic_reduction_pct": 0.0,
+            "psnr_drop_db": 0.0,
+            "mean_abs_rank_error": 0.0,
+            "mean_table_entries": 1799.1507936507937,
+            "mean_incoming_entries": 439.8253968253968
+          },
+          "synthetic_temporal_sorting.scene3": {
+            "traffic_reduction_pct": 0.0,
+            "psnr_drop_db": 0.0,
+            "mean_abs_rank_error": 0.0,
+            "mean_table_entries": 1879.7650793650794,
+            "mean_incoming_entries": 189.53531746031746
+          }
+        }
+      },
+      "neo_reuse_update": {
+        "traffic_MB": 513.692688,
+        "baseline_traffic_MB": 1605.899752,
+        "traffic_MB_without_deferred_depth_update": 855.558976,
+        "deferred_depth_update_savings_pct": 39.958237548781206,
+        "per_scene": {
+          "synthetic_temporal_sorting.scene0": {
+            "traffic_reduction_pct": 66.05291647912178,
+            "psnr_drop_db": 0.012940836253846568,
+            "mean_abs_rank_error": 12.271810072576542,
+            "mean_table_entries": 2116.845634920635,
+            "mean_incoming_entries": 317.9190476190476
+          },
+          "synthetic_temporal_sorting.scene1": {
+            "traffic_reduction_pct": 73.28541421484056,
+            "psnr_drop_db": 0.0021981547442238404,
+            "mean_abs_rank_error": 5.385099757334755,
+            "mean_table_entries": 2041.5031746031746,
+            "mean_incoming_entries": 202.63650793650794
+          },
+          "synthetic_temporal_sorting.scene2": {
+            "traffic_reduction_pct": 57.94074616822852,
+            "psnr_drop_db": 0.05063196216475553,
+            "mean_abs_rank_error": 16.77894973799506,
+            "mean_table_entries": 2230.429761904762,
+            "mean_incoming_entries": 439.8253968253968
+          },
+          "synthetic_temporal_sorting.scene3": {
+            "traffic_reduction_pct": 74.24025274852055,
+            "psnr_drop_db": 0.007716486949125148,
+            "mean_abs_rank_error": 4.416160578542089,
+            "mean_table_entries": 2069.8218253968253,
+            "mean_incoming_entries": 189.53531746031746
+          }
+        }
+      }
+    },
+    "rapid_camera_motion": {
+      "full_sort": {
+        "traffic_MB": 1482.587984,
+        "baseline_traffic_MB": 1482.587984,
+        "traffic_MB_without_deferred_depth_update": 1482.587984,
+        "deferred_depth_update_savings_pct": 0.0,
+        "per_scene": {
+          "rapid_camera_motion.scene0": {
+            "traffic_reduction_pct": 0.0,
+            "psnr_drop_db": 0.0,
+            "mean_abs_rank_error": 0.0,
+            "mean_table_entries": 1790.7309523809524,
+            "mean_incoming_entries": 501.340873015873
+          },
+          "rapid_camera_motion.scene1": {
+            "traffic_reduction_pct": 0.0,
+            "psnr_drop_db": 0.0,
+            "mean_abs_rank_error": 0.0,
+            "mean_table_entries": 1718.5912698412699,
+            "mean_incoming_entries": 515.575
+          },
+          "rapid_camera_motion.scene2": {
+            "traffic_reduction_pct": 0.0,
+            "psnr_drop_db": 0.0,
+            "mean_abs_rank_error": 0.0,
+            "mean_table_entries": 1589.5670634920634,
+            "mean_incoming_entries": 772.188492063492
+          },
+          "rapid_camera_motion.scene3": {
+            "traffic_reduction_pct": 0.0,
+            "psnr_drop_db": 0.0,
+            "mean_abs_rank_error": 0.0,
+            "mean_table_entries": 1801.4035714285715,
+            "mean_incoming_entries": 632.8519841269841
+          }
+        }
+      },
+      "neo_reuse_update": {
+        "traffic_MB": 837.850408,
+        "baseline_traffic_MB": 1482.587984,
+        "traffic_MB_without_deferred_depth_update": 1213.723496,
+        "deferred_depth_update_savings_pct": 30.96859286639368,
+        "per_scene": {
+          "rapid_camera_motion.scene0": {
+            "traffic_reduction_pct": 53.35756648959402,
+            "psnr_drop_db": 0.08672212773390361,
+            "mean_abs_rank_error": 18.128678613069802,
+            "mean_table_entries": 2275.368650793651,
+            "mean_incoming_entries": 501.340873015873
+          },
+          "rapid_camera_motion.scene1": {
+            "traffic_reduction_pct": 50.46867395615673,
+            "psnr_drop_db": 0.33282392572560293,
+            "mean_abs_rank_error": 23.444547676569293,
+            "mean_table_entries": 2227.249603174603,
+            "mean_incoming_entries": 515.575
+          },
+          "rapid_camera_motion.scene2": {
+            "traffic_reduction_pct": 23.704725836213758,
+            "psnr_drop_db": 0.1454065421284526,
+            "mean_abs_rank_error": 28.123365243499343,
+            "mean_table_entries": 2336.6507936507937,
+            "mean_incoming_entries": 772.188492063492
+          },
+          "rapid_camera_motion.scene3": {
+            "traffic_reduction_pct": 43.80834986441443,
+            "psnr_drop_db": 0.0727600692924626,
+            "mean_abs_rank_error": 22.18215556958247,
+            "mean_table_entries": 2421.9480158730157,
+            "mean_incoming_entries": 632.8519841269841
+          }
+        }
+      }
+    }
+  }
+}

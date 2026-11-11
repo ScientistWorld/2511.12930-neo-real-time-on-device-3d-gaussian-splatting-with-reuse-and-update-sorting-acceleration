@@ -1,66 +1,36 @@
 {
   "_metadata": {
-    "slice": "test",
-    "frame_rule": "update_frame_index_mod_4_in_0_or_3",
-    "description": "Held-out test slice: update frames with index modulo 4 equal to 0 or 3 in every scene."
+    "split": "test",
+    "failed_methods": {},
+    "ignored_manifests": [],
+    "note": "All numbers are computed by the evaluator, which generates the scenes, executes every method's sorting operations on its own memory model and renders the result. Failed methods receive the worst value of every scored metric in every experiment."
   },
   "experiments": {
     "synthetic_temporal_sorting": {
       "results": {
         "full_sort": {
           "traffic_reduction_pct": 0.0,
-          "pair_order_accuracy": 1.0,
-          "adjacent_pair_accuracy": 1.0,
-          "sampled_pair_order_accuracy": 1.0,
-          "traffic_MB": 15.48288,
-          "mean_abs_rank_error": 0.0,
-          "p99_abs_rank_error": 0.0
+          "psnr_drop_db": 0.0,
+          "mean_abs_rank_error": 0.0
         },
         "neo_reuse_update": {
-          "traffic_reduction_pct": 50.561342592592595,
-          "pair_order_accuracy": 0.9088411496559042,
-          "adjacent_pair_accuracy": 0.6561587384187847,
-          "sampled_pair_order_accuracy": 0.9624356706732042,
-          "traffic_MB": 7.654528,
-          "mean_abs_rank_error": 1.7203621031746033,
-          "p99_abs_rank_error": 6.484126984126984
+          "traffic_reduction_pct": 68.01215721216451,
+          "psnr_drop_db": 0.018371860027987772,
+          "mean_abs_rank_error": 9.634256901843946
         }
       }
     },
-    "deferred_depth_update_ablation": {
+    "rapid_camera_motion": {
       "results": {
         "full_sort": {
           "traffic_reduction_pct": 0.0,
-          "pair_order_accuracy": 1.0,
-          "adjacent_pair_accuracy": 1.0,
-          "sampled_pair_order_accuracy": 1.0,
-          "traffic_MB": 15.48288,
-          "mean_abs_rank_error": 0.0,
-          "p99_abs_rank_error": 0.0,
-          "deferred_update_savings_pct": 0.0,
-          "deferred_update_savings_MB": 0.0
-        },
-        "neo_no_deferred_depth_update": {
-          "traffic_reduction_pct": 30.561342592592588,
-          "pair_order_accuracy": 0.9088411496559042,
-          "adjacent_pair_accuracy": 0.6561587384187847,
-          "sampled_pair_order_accuracy": 0.9624356706732042,
-          "traffic_MB": 10.751104,
-          "mean_abs_rank_error": 1.7203621031746033,
-          "p99_abs_rank_error": 6.484126984126984,
-          "deferred_update_savings_pct": 0.0,
-          "deferred_update_savings_MB": 0.0
+          "psnr_drop_db": 0.0,
+          "mean_abs_rank_error": 0.0
         },
         "neo_reuse_update": {
-          "traffic_reduction_pct": 50.561342592592595,
-          "pair_order_accuracy": 0.9088411496559042,
-          "adjacent_pair_accuracy": 0.6561587384187847,
-          "sampled_pair_order_accuracy": 0.9624356706732042,
-          "traffic_MB": 7.654528,
-          "mean_abs_rank_error": 1.7203621031746033,
-          "p99_abs_rank_error": 6.484126984126984,
-          "deferred_update_savings_pct": 28.802400200016663,
-          "deferred_update_savings_MB": 3.0965759999999998
+          "traffic_reduction_pct": 43.487306180676555,
+          "psnr_drop_db": 0.15942816622010544,
+          "mean_abs_rank_error": 22.810934871583306
         }
       }
     }
