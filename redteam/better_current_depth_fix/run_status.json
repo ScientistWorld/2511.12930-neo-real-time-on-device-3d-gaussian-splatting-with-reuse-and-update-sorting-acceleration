@@ -1,0 +1,47 @@
+{
+  "case": "better_current_depth_fix",
+  "test_command": "bash scripts/evaluate_test.sh",
+  "test_arguments": [],
+  "input_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "evaluator_mutated": false,
+  "candidate_seconds": 7.3957506110018585,
+  "train": {
+    "returncode": 0,
+    "seconds": 4.230949540011352
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 3.4227630579989636
+  },
+  "methods_on_disk": [
+    "better_current_depth_fix",
+    "better_current_depth_fix_no_deferred_depth_update",
+    "full_sort"
+  ],
+  "methods_written": {
+    "synthetic_temporal_sorting": [
+      "better_current_depth_fix",
+      "full_sort"
+    ],
+    "deferred_depth_update_ablation": [
+      "better_current_depth_fix",
+      "better_current_depth_fix_no_deferred_depth_update",
+      "full_sort"
+    ]
+  },
+  "post_candidate_workload_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "artifacts": {
+    "better_current_depth_fix.json": {
+      "bytes": 9553585,
+      "sha256": "cc73635fe31df4e1985d434f6721d83dcd6b32bcad62467602f9699091e32d27"
+    },
+    "better_current_depth_fix_no_deferred_depth_update.json": {
+      "bytes": 9553611,
+      "sha256": "ea4fcf7927c588df315707297f72880e9caba27ce1f4078715bfdbc27ba39c46"
+    },
+    "full_sort.json": {
+      "bytes": 9553606,
+      "sha256": "41a9dd809f2519d6d1a30e8928e2496db8f9590ba15642dd8822ecf78cb8b667"
+    }
+  }
+}

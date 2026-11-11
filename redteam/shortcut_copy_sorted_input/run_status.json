@@ -1,0 +1,47 @@
+{
+  "case": "shortcut_copy_sorted_input",
+  "test_command": "bash scripts/evaluate_test.sh",
+  "test_arguments": [],
+  "input_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "evaluator_mutated": false,
+  "candidate_seconds": 0.9536432689928915,
+  "train": {
+    "returncode": 0,
+    "seconds": 2.483324127999367
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 1.3019138620002195
+  },
+  "methods_on_disk": [
+    "full_sort",
+    "shortcut_copy_sorted_input",
+    "shortcut_copy_sorted_input_no_deferred_depth_update"
+  ],
+  "methods_written": {
+    "synthetic_temporal_sorting": [
+      "full_sort",
+      "shortcut_copy_sorted_input"
+    ],
+    "deferred_depth_update_ablation": [
+      "full_sort",
+      "shortcut_copy_sorted_input",
+      "shortcut_copy_sorted_input_no_deferred_depth_update"
+    ]
+  },
+  "post_candidate_workload_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "artifacts": {
+    "shortcut_copy_sorted_input_no_deferred_depth_update.json": {
+      "bytes": 2436485,
+      "sha256": "cb488fe662cfddffe5d36a5a565d175c8118b83491942f4f1b30a32ab493de4f"
+    },
+    "shortcut_copy_sorted_input.json": {
+      "bytes": 2436430,
+      "sha256": "5fa243bdd9a1362f679a0816485215ceba851ad3658dfa267cd752a59030e574"
+    },
+    "full_sort.json": {
+      "bytes": 9553606,
+      "sha256": "41a9dd809f2519d6d1a30e8928e2496db8f9590ba15642dd8822ecf78cb8b667"
+    }
+  }
+}

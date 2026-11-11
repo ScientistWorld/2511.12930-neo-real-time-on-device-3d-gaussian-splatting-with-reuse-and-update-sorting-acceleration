@@ -1,0 +1,47 @@
+{
+  "case": "shortcut_baseline_inflate",
+  "test_command": "bash scripts/evaluate_test.sh",
+  "test_arguments": [],
+  "input_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "evaluator_mutated": false,
+  "candidate_seconds": 0.5707882950082421,
+  "train": {
+    "returncode": 0,
+    "seconds": 2.88639780000085
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 3.026503432993195
+  },
+  "methods_on_disk": [
+    "full_sort",
+    "shortcut_baseline_inflate",
+    "shortcut_baseline_inflate_no_deferred_depth_update"
+  ],
+  "methods_written": {
+    "synthetic_temporal_sorting": [
+      "full_sort",
+      "shortcut_baseline_inflate"
+    ],
+    "deferred_depth_update_ablation": [
+      "full_sort",
+      "shortcut_baseline_inflate",
+      "shortcut_baseline_inflate_no_deferred_depth_update"
+    ]
+  },
+  "post_candidate_workload_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "artifacts": {
+    "shortcut_baseline_inflate_no_deferred_depth_update.json": {
+      "bytes": 2436709,
+      "sha256": "46e456b93d33c157b94d72a40262faf49739405e6f24771c246007b486ec77b1"
+    },
+    "shortcut_baseline_inflate.json": {
+      "bytes": 2436683,
+      "sha256": "1dafa13013e99a51a77c4b479dacdcc078ae68de75f5380cfd223b2d9d6c940c"
+    },
+    "full_sort.json": {
+      "bytes": 2438130,
+      "sha256": "6c1b318b767e357533fb638ecd25df4752530a7fcaf5f9f4360345eb3739a335"
+    }
+  }
+}

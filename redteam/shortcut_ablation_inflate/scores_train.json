@@ -1,0 +1,68 @@
+{
+  "_metadata": {
+    "slice": "train",
+    "frame_rule": "frame_index_mod_4_in_1_or_2",
+    "description": "Visible train slice: frames with index modulo 4 equal to 1 or 2 in every scene."
+  },
+  "experiments": {
+    "synthetic_temporal_sorting": {
+      "results": {
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "adjacent_pair_accuracy": 1.0,
+          "sampled_pair_order_accuracy": 1.0,
+          "traffic_MB": 17.69472,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0
+        },
+        "shortcut_ablation_inflate": {
+          "traffic_reduction_pct": 51.066984953703695,
+          "pair_order_accuracy": 0.909366091345319,
+          "adjacent_pair_accuracy": 0.6595789744212865,
+          "sampled_pair_order_accuracy": 0.9647076207825522,
+          "traffic_MB": 8.658560000000001,
+          "mean_abs_rank_error": 1.6563585069444444,
+          "p99_abs_rank_error": 6.214409722222222
+        }
+      }
+    },
+    "deferred_depth_update_ablation": {
+      "results": {
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "adjacent_pair_accuracy": 1.0,
+          "sampled_pair_order_accuracy": 1.0,
+          "traffic_MB": 17.69472,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0,
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
+        },
+        "shortcut_ablation_inflate": {
+          "traffic_reduction_pct": 51.066984953703695,
+          "pair_order_accuracy": 0.909366091345319,
+          "adjacent_pair_accuracy": 0.6595789744212865,
+          "sampled_pair_order_accuracy": 0.9647076207825522,
+          "traffic_MB": 8.658560000000001,
+          "mean_abs_rank_error": 1.6563585069444444,
+          "p99_abs_rank_error": 6.214409722222222,
+          "deferred_update_savings_pct": 99.2901367361716,
+          "deferred_update_savings_MB": 1211.0918399999998
+        },
+        "shortcut_ablation_inflate_no_deferred_depth_update": {
+          "traffic_reduction_pct": -6793.301504629629,
+          "pair_order_accuracy": 0.909366091345319,
+          "adjacent_pair_accuracy": 0.6595789744212865,
+          "sampled_pair_order_accuracy": 0.9647076207825522,
+          "traffic_MB": 1219.7504,
+          "mean_abs_rank_error": 1.6563585069444444,
+          "p99_abs_rank_error": 6.214409722222222,
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
+        }
+      }
+    }
+  }
+}

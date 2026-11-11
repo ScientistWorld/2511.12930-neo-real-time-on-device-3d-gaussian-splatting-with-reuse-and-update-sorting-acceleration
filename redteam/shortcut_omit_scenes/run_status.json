@@ -1,0 +1,47 @@
+{
+  "case": "shortcut_omit_scenes",
+  "test_command": "bash scripts/evaluate_test.sh",
+  "test_arguments": [],
+  "input_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "evaluator_mutated": false,
+  "candidate_seconds": 1.2611957949993666,
+  "train": {
+    "returncode": 0,
+    "seconds": 4.001817994998419
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 2.4703217210044386
+  },
+  "methods_on_disk": [
+    "full_sort",
+    "shortcut_omit_scenes",
+    "shortcut_omit_scenes_no_deferred_depth_update"
+  ],
+  "methods_written": {
+    "synthetic_temporal_sorting": [
+      "full_sort",
+      "shortcut_omit_scenes"
+    ],
+    "deferred_depth_update_ablation": [
+      "full_sort",
+      "shortcut_omit_scenes",
+      "shortcut_omit_scenes_no_deferred_depth_update"
+    ]
+  },
+  "post_candidate_workload_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "artifacts": {
+    "shortcut_omit_scenes_no_deferred_depth_update.json": {
+      "bytes": 658683,
+      "sha256": "c34e425cb4bf1337d07cb929ac22f8a2356621d119fa31af54117e7318b80fef"
+    },
+    "shortcut_omit_scenes.json": {
+      "bytes": 658659,
+      "sha256": "bc39a043a5d80b7a47bd13fcc61bb1d83d99577d37b7fd467ffdc1b7a0a0d3d1"
+    },
+    "full_sort.json": {
+      "bytes": 9553606,
+      "sha256": "41a9dd809f2519d6d1a30e8928e2496db8f9590ba15642dd8822ecf78cb8b667"
+    }
+  }
+}

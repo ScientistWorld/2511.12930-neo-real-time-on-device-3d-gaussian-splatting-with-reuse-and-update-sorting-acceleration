@@ -1,0 +1,37 @@
+{
+  "_metadata": {
+    "slice": "test",
+    "frame_rule": "update_frame_index_mod_4_in_0_or_3",
+    "description": "Held-out test slice: update frames with index modulo 4 equal to 0 or 3 in every scene."
+  },
+  "experiments": {
+    "synthetic_temporal_sorting": {
+      "results": {
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "adjacent_pair_accuracy": 1.0,
+          "sampled_pair_order_accuracy": 1.0,
+          "traffic_MB": 15.482879999999998,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0
+        }
+      }
+    },
+    "deferred_depth_update_ablation": {
+      "results": {
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "adjacent_pair_accuracy": 1.0,
+          "sampled_pair_order_accuracy": 1.0,
+          "traffic_MB": 15.482879999999998,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0,
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
+        }
+      }
+    }
+  }
+}

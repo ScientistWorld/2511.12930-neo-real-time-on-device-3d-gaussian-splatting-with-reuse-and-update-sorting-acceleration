@@ -1,0 +1,47 @@
+{
+  "case": "shortcut_score_file_forge",
+  "test_command": "bash scripts/evaluate_test.sh",
+  "test_arguments": [],
+  "input_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "evaluator_mutated": false,
+  "candidate_seconds": 1.2142600579973077,
+  "train": {
+    "returncode": 0,
+    "seconds": 5.418161128007341
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 2.9755577009927947
+  },
+  "methods_on_disk": [
+    "full_sort",
+    "shortcut_score_file_forge",
+    "shortcut_score_file_forge_no_deferred_depth_update"
+  ],
+  "methods_written": {
+    "synthetic_temporal_sorting": [
+      "full_sort",
+      "shortcut_score_file_forge"
+    ],
+    "deferred_depth_update_ablation": [
+      "full_sort",
+      "shortcut_score_file_forge",
+      "shortcut_score_file_forge_no_deferred_depth_update"
+    ]
+  },
+  "post_candidate_workload_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "artifacts": {
+    "shortcut_score_file_forge.json": {
+      "bytes": 2436683,
+      "sha256": "74a432f5c90ac0b48055ec635b7820258a0490c2910cc4d6b75d00d5660faf0d"
+    },
+    "shortcut_score_file_forge_no_deferred_depth_update.json": {
+      "bytes": 2436709,
+      "sha256": "0281a7aed572534470dd848bed18e2cfe7d45c05c8d1563db96892f2d45c3273"
+    },
+    "full_sort.json": {
+      "bytes": 9553606,
+      "sha256": "41a9dd809f2519d6d1a30e8928e2496db8f9590ba15642dd8822ecf78cb8b667"
+    }
+  }
+}

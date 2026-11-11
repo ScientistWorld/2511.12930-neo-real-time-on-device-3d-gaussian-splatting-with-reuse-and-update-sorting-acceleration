@@ -1,0 +1,47 @@
+{
+  "case": "honest_brute_force",
+  "test_command": "bash scripts/evaluate_test.sh",
+  "test_arguments": [],
+  "input_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "evaluator_mutated": false,
+  "candidate_seconds": 1.9847172709996812,
+  "train": {
+    "returncode": 0,
+    "seconds": 5.225066330996924
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 2.4234306559956167
+  },
+  "methods_on_disk": [
+    "full_sort",
+    "honest_brute_force",
+    "honest_brute_force_no_deferred_depth_update"
+  ],
+  "methods_written": {
+    "synthetic_temporal_sorting": [
+      "full_sort",
+      "honest_brute_force"
+    ],
+    "deferred_depth_update_ablation": [
+      "full_sort",
+      "honest_brute_force",
+      "honest_brute_force_no_deferred_depth_update"
+    ]
+  },
+  "post_candidate_workload_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "artifacts": {
+    "honest_brute_force.json": {
+      "bytes": 2436422,
+      "sha256": "00045e2f71cf132067e89e7ecd956f1f7ffd3f1a8daa1299116e58e2b0dbbf25"
+    },
+    "honest_brute_force_no_deferred_depth_update.json": {
+      "bytes": 2436477,
+      "sha256": "b3855a6b8c7b240a5c199ec11f84efb89dbe404885b308d2d83b915d4f34a0a5"
+    },
+    "full_sort.json": {
+      "bytes": 9553606,
+      "sha256": "41a9dd809f2519d6d1a30e8928e2496db8f9590ba15642dd8822ecf78cb8b667"
+    }
+  }
+}

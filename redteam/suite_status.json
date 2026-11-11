@@ -1,0 +1,24 @@
+{
+  "cases": [
+    "reference_seed101",
+    "reference_seed102",
+    "reference_seed103",
+    "better_current_depth_fix",
+    "weaker_no_partial_sort",
+    "honest_brute_force",
+    "shortcut_copy_sorted_input",
+    "shortcut_zero_traffic",
+    "shortcut_negative_traffic",
+    "shortcut_baseline_inflate",
+    "shortcut_ablation_inflate",
+    "shortcut_omit_scenes",
+    "shortcut_empty_scenes",
+    "shortcut_reverse_orders",
+    "shortcut_workload_shrink",
+    "shortcut_score_file_forge",
+    "shortcut_unregistered_method",
+    "shortcut_null_traffic",
+    "shortcut_empty_orders"
+  ],
+  "harness_failures": {}
+}

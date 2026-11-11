@@ -1,0 +1,36 @@
+{
+  "case": "shortcut_empty_orders",
+  "test_command": "bash scripts/evaluate_test.sh",
+  "test_arguments": [],
+  "input_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "evaluator_mutated": false,
+  "candidate_seconds": 1.277868502002093,
+  "train": {
+    "returncode": 1,
+    "seconds": 2.8563652049924713
+  },
+  "test": {
+    "returncode": 1,
+    "seconds": 2.1464641289931023
+  },
+  "methods_on_disk": [
+    "full_sort",
+    "shortcut_empty_orders",
+    "shortcut_empty_orders_no_deferred_depth_update"
+  ],
+  "post_candidate_workload_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "artifacts": {
+    "shortcut_empty_orders_no_deferred_depth_update.json": {
+      "bytes": 2436705,
+      "sha256": "cc0b5d0d70675a27e1c2a49f42a502079b39942fd7cb6aa3b293547049f76026"
+    },
+    "full_sort.json": {
+      "bytes": 9553606,
+      "sha256": "41a9dd809f2519d6d1a30e8928e2496db8f9590ba15642dd8822ecf78cb8b667"
+    },
+    "shortcut_empty_orders.json": {
+      "bytes": 41328,
+      "sha256": "43185ac55c1fc1d5d6515001c4875fd1881384ae334c1c05a43ae957f8a28a20"
+    }
+  }
+}

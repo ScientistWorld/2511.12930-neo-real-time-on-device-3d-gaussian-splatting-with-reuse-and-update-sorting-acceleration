@@ -1,0 +1,68 @@
+{
+  "_metadata": {
+    "slice": "train",
+    "frame_rule": "frame_index_mod_4_in_1_or_2",
+    "description": "Visible train slice: frames with index modulo 4 equal to 1 or 2 in every scene."
+  },
+  "experiments": {
+    "synthetic_temporal_sorting": {
+      "results": {
+        "better_current_depth_fix": {
+          "traffic_reduction_pct": 31.066984953703713,
+          "pair_order_accuracy": 0.9993194765672034,
+          "adjacent_pair_accuracy": 0.9977582135675402,
+          "sampled_pair_order_accuracy": 0.9996178883262006,
+          "traffic_MB": 12.197503999999999,
+          "mean_abs_rank_error": 0.016059027777777776,
+          "p99_abs_rank_error": 0.5436921296296297
+        },
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "adjacent_pair_accuracy": 1.0,
+          "sampled_pair_order_accuracy": 1.0,
+          "traffic_MB": 17.69472,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0
+        }
+      }
+    },
+    "deferred_depth_update_ablation": {
+      "results": {
+        "better_current_depth_fix": {
+          "traffic_reduction_pct": 31.066984953703713,
+          "pair_order_accuracy": 0.9993194765672034,
+          "adjacent_pair_accuracy": 0.9977582135675402,
+          "sampled_pair_order_accuracy": 0.9996178883262006,
+          "traffic_MB": 12.197503999999999,
+          "mean_abs_rank_error": 0.016059027777777776,
+          "p99_abs_rank_error": 0.5436921296296297,
+          "deferred_update_savings_pct": 22.488836108377196,
+          "deferred_update_savings_MB": 3.5389440000000008
+        },
+        "better_current_depth_fix_no_deferred_depth_update": {
+          "traffic_reduction_pct": 11.066984953703706,
+          "pair_order_accuracy": 0.9993194765672034,
+          "adjacent_pair_accuracy": 0.9977582135675402,
+          "sampled_pair_order_accuracy": 0.9996178883262006,
+          "traffic_MB": 15.736448,
+          "mean_abs_rank_error": 0.016059027777777776,
+          "p99_abs_rank_error": 0.5436921296296297,
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
+        },
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "adjacent_pair_accuracy": 1.0,
+          "sampled_pair_order_accuracy": 1.0,
+          "traffic_MB": 17.69472,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0,
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
+        }
+      }
+    }
+  }
+}

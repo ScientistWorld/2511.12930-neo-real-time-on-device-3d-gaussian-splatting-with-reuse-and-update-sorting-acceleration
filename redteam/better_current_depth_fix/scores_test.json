@@ -1,0 +1,68 @@
+{
+  "_metadata": {
+    "slice": "test",
+    "frame_rule": "update_frame_index_mod_4_in_0_or_3",
+    "description": "Held-out test slice: update frames with index modulo 4 equal to 0 or 3 in every scene."
+  },
+  "experiments": {
+    "synthetic_temporal_sorting": {
+      "results": {
+        "better_current_depth_fix": {
+          "traffic_reduction_pct": 30.561342592592588,
+          "pair_order_accuracy": 0.9993361913646455,
+          "adjacent_pair_accuracy": 0.9978468300047941,
+          "sampled_pair_order_accuracy": 0.9996659399777493,
+          "traffic_MB": 10.751104,
+          "mean_abs_rank_error": 0.01580067791005291,
+          "p99_abs_rank_error": 0.5119047619047619
+        },
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "adjacent_pair_accuracy": 1.0,
+          "sampled_pair_order_accuracy": 1.0,
+          "traffic_MB": 15.482879999999998,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0
+        }
+      }
+    },
+    "deferred_depth_update_ablation": {
+      "results": {
+        "better_current_depth_fix": {
+          "traffic_reduction_pct": 30.561342592592588,
+          "pair_order_accuracy": 0.9993361913646455,
+          "adjacent_pair_accuracy": 0.9978468300047941,
+          "sampled_pair_order_accuracy": 0.9996659399777493,
+          "traffic_MB": 10.751104,
+          "mean_abs_rank_error": 0.01580067791005291,
+          "p99_abs_rank_error": 0.5119047619047619,
+          "deferred_update_savings_pct": 22.36169524425753,
+          "deferred_update_savings_MB": 3.0965760000000007
+        },
+        "better_current_depth_fix_no_deferred_depth_update": {
+          "traffic_reduction_pct": 10.561342592592581,
+          "pair_order_accuracy": 0.9993361913646455,
+          "adjacent_pair_accuracy": 0.9978468300047941,
+          "sampled_pair_order_accuracy": 0.9996659399777493,
+          "traffic_MB": 13.84768,
+          "mean_abs_rank_error": 0.01580067791005291,
+          "p99_abs_rank_error": 0.5119047619047619,
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
+        },
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "adjacent_pair_accuracy": 1.0,
+          "sampled_pair_order_accuracy": 1.0,
+          "traffic_MB": 15.482879999999998,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0,
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
+        }
+      }
+    }
+  }
+}

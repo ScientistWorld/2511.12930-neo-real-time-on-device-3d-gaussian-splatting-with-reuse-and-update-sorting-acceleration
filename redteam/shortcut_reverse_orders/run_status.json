@@ -1,0 +1,47 @@
+{
+  "case": "shortcut_reverse_orders",
+  "test_command": "bash scripts/evaluate_test.sh",
+  "test_arguments": [],
+  "input_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "evaluator_mutated": false,
+  "candidate_seconds": 0.9273737170005916,
+  "train": {
+    "returncode": 0,
+    "seconds": 3.600160269998014
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 1.4734696990053635
+  },
+  "methods_on_disk": [
+    "full_sort",
+    "shortcut_reverse_orders",
+    "shortcut_reverse_orders_no_deferred_depth_update"
+  ],
+  "methods_written": {
+    "synthetic_temporal_sorting": [
+      "full_sort",
+      "shortcut_reverse_orders"
+    ],
+    "deferred_depth_update_ablation": [
+      "full_sort",
+      "shortcut_reverse_orders",
+      "shortcut_reverse_orders_no_deferred_depth_update"
+    ]
+  },
+  "post_candidate_workload_sha256": "c86546062fac59053758c5bf22eff214fc2cacb1deed83f2307ece4ffa3e39aa",
+  "artifacts": {
+    "shortcut_reverse_orders.json": {
+      "bytes": 2436681,
+      "sha256": "8f9f3610bcdab198eb9b0127db9c41bde5217573236f689bd2c04f6180656c5b"
+    },
+    "shortcut_reverse_orders_no_deferred_depth_update.json": {
+      "bytes": 2436705,
+      "sha256": "f0b0216634d9de9c5f5a6d1372a4e453afa5b4d24ad298a9f739c2a73cea78b0"
+    },
+    "full_sort.json": {
+      "bytes": 9553606,
+      "sha256": "41a9dd809f2519d6d1a30e8928e2496db8f9590ba15642dd8822ecf78cb8b667"
+    }
+  }
+}
