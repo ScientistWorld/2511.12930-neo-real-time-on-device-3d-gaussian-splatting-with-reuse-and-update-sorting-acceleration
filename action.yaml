@@ -1,8 +1,6 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends.
-action: submit
-gpus: 0
-test: false
+action: done
 milestone: core_claim_plus
-notes: "Hardening check: official train/test reference runs from final code, before/after replay of the evaluator-abort shortcut, and the audit population (variants, brute force, shortcuts) through the hidden test and train evaluators."
+notes: "Hardened gym: evaluator-owned sorting protocol closes all REDTEAM shortcuts plus evaluator-abort/stall; better variant ranks above reference, brute force/baseline/weaker below in all populations; see HARDENING.md."
