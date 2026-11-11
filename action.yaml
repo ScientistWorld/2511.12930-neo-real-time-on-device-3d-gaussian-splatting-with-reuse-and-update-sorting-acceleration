@@ -1,4 +1,2 @@
-action: submit
-gpus: 0
-test: true
-notes: "Focused follow-up: keep a weakened method in test results while hiding its losing experiment via the visible train-score registration; update audit summary."
+action: done
+notes: "Completed 20-run scoring audit: ranking reversals and eight paying shortcuts documented; evidence committed and original benchmark files restored."
