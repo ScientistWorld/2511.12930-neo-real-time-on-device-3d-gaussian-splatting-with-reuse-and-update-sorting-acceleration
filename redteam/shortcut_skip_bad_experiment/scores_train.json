@@ -1,0 +1,59 @@
+{
+  "_metadata": {
+    "slice": "train",
+    "frame_rule": "frame_index_mod_4_in_1_or_2",
+    "description": "Visible train slice: frames with index modulo 4 equal to 1 or 2 in every scene."
+  },
+  "experiments": {
+    "synthetic_temporal_sorting": {
+      "results": {
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "adjacent_pair_accuracy": 1.0,
+          "sampled_pair_order_accuracy": 1.0,
+          "traffic_MB": 17.69472,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0
+        }
+      }
+    },
+    "deferred_depth_update_ablation": {
+      "results": {
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "adjacent_pair_accuracy": 1.0,
+          "sampled_pair_order_accuracy": 1.0,
+          "traffic_MB": 17.69472,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0,
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
+        },
+        "shortcut_skip_bad_experiment": {
+          "traffic_reduction_pct": 73.42664930555556,
+          "pair_order_accuracy": 0.8697074578908507,
+          "adjacent_pair_accuracy": 0.6104196281135489,
+          "sampled_pair_order_accuracy": 0.9246580027900547,
+          "traffic_MB": 4.70208,
+          "mean_abs_rank_error": 3.0773111979166665,
+          "p99_abs_rank_error": 11.373842592592593,
+          "deferred_update_savings_pct": 42.94301290713387,
+          "deferred_update_savings_MB": 3.538944
+        },
+        "shortcut_skip_bad_experiment_no_deferred_depth_update": {
+          "traffic_reduction_pct": 53.426649305555564,
+          "pair_order_accuracy": 0.8697074578908507,
+          "adjacent_pair_accuracy": 0.6104196281135489,
+          "sampled_pair_order_accuracy": 0.9246580027900547,
+          "traffic_MB": 8.241024,
+          "mean_abs_rank_error": 3.0773111979166665,
+          "p99_abs_rank_error": 11.373842592592593,
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
+        }
+      }
+    }
+  }
+}

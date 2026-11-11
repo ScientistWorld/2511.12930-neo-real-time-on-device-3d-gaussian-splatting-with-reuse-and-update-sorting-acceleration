@@ -1,0 +1,59 @@
+{
+  "_metadata": {
+    "slice": "test",
+    "frame_rule": "update_frame_index_mod_4_in_0_or_3",
+    "description": "Held-out test slice: update frames with index modulo 4 equal to 0 or 3 in every scene."
+  },
+  "experiments": {
+    "synthetic_temporal_sorting": {
+      "results": {
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "adjacent_pair_accuracy": 1.0,
+          "sampled_pair_order_accuracy": 1.0,
+          "traffic_MB": 15.482879999999998,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0
+        }
+      }
+    },
+    "deferred_depth_update_ablation": {
+      "results": {
+        "full_sort": {
+          "traffic_reduction_pct": 0.0,
+          "pair_order_accuracy": 1.0,
+          "adjacent_pair_accuracy": 1.0,
+          "sampled_pair_order_accuracy": 1.0,
+          "traffic_MB": 15.482879999999998,
+          "mean_abs_rank_error": 0.0,
+          "p99_abs_rank_error": 0.0,
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
+        },
+        "shortcut_skip_bad_experiment": {
+          "traffic_reduction_pct": 73.25810185185185,
+          "pair_order_accuracy": 0.860318551024351,
+          "adjacent_pair_accuracy": 0.5977302978382326,
+          "sampled_pair_order_accuracy": 0.9158596335507855,
+          "traffic_MB": 4.140416,
+          "mean_abs_rank_error": 3.3615244708994707,
+          "p99_abs_rank_error": 12.410714285714286,
+          "deferred_update_savings_pct": 42.788163922248366,
+          "deferred_update_savings_MB": 3.0965760000000007
+        },
+        "shortcut_skip_bad_experiment_no_deferred_depth_update": {
+          "traffic_reduction_pct": 53.25810185185185,
+          "pair_order_accuracy": 0.860318551024351,
+          "adjacent_pair_accuracy": 0.5977302978382326,
+          "sampled_pair_order_accuracy": 0.9158596335507855,
+          "traffic_MB": 7.236992000000001,
+          "mean_abs_rank_error": 3.3615244708994707,
+          "p99_abs_rank_error": 12.410714285714286,
+          "deferred_update_savings_pct": 0.0,
+          "deferred_update_savings_MB": 0.0
+        }
+      }
+    }
+  }
+}
