@@ -1,0 +1,101 @@
+{
+  "_metadata": {
+    "split": "train",
+    "failed_methods": {},
+    "elapsed_s": 418.9
+  },
+  "experiments": {
+    "synthetic_temporal_sorting": {
+      "full_sort": {
+        "traffic_MB": 826.966312,
+        "baseline_traffic_MB": 826.966312,
+        "traffic_MB_without_deferred_depth_update": 826.966312,
+        "deferred_depth_update_savings_pct": 0.0,
+        "per_scene": {
+          "synthetic_temporal_sorting.scene0": {
+            "traffic_reduction_pct": 0.0,
+            "psnr_drop_db": 0.0,
+            "mean_abs_rank_error": 0.0,
+            "mean_table_entries": 1911.0825396825396,
+            "mean_incoming_entries": 199.384126984127
+          },
+          "synthetic_temporal_sorting.scene1": {
+            "traffic_reduction_pct": 0.0,
+            "psnr_drop_db": 0.0,
+            "mean_abs_rank_error": 0.0,
+            "mean_table_entries": 1835.1944444444443,
+            "mean_incoming_entries": 370.6849206349206
+          }
+        }
+      },
+      "neo_reuse_update": {
+        "traffic_MB": 262.04372,
+        "baseline_traffic_MB": 826.966312,
+        "traffic_MB_without_deferred_depth_update": 436.078792,
+        "deferred_depth_update_savings_pct": 39.909088722663675,
+        "per_scene": {
+          "synthetic_temporal_sorting.scene0": {
+            "traffic_reduction_pct": 73.6129571624021,
+            "psnr_drop_db": 0.017368200433710203,
+            "mean_abs_rank_error": 6.509513934457708,
+            "mean_table_entries": 2113.6964285714284,
+            "mean_incoming_entries": 199.384126984127
+          },
+          "synthetic_temporal_sorting.scene1": {
+            "traffic_reduction_pct": 62.88016856621458,
+            "psnr_drop_db": 0.016377973019344034,
+            "mean_abs_rank_error": 16.648203641169175,
+            "mean_table_entries": 2197.763492063492,
+            "mean_incoming_entries": 370.6849206349206
+          }
+        }
+      }
+    },
+    "rapid_camera_motion": {
+      "full_sort": {
+        "traffic_MB": 760.17008,
+        "baseline_traffic_MB": 760.17008,
+        "traffic_MB_without_deferred_depth_update": 760.17008,
+        "deferred_depth_update_savings_pct": 0.0,
+        "per_scene": {
+          "rapid_camera_motion.scene0": {
+            "traffic_reduction_pct": 0.0,
+            "psnr_drop_db": 0.0,
+            "mean_abs_rank_error": 0.0,
+            "mean_table_entries": 1903.0559523809525,
+            "mean_incoming_entries": 688.9861111111111
+          },
+          "rapid_camera_motion.scene1": {
+            "traffic_reduction_pct": 0.0,
+            "psnr_drop_db": 0.0,
+            "mean_abs_rank_error": 0.0,
+            "mean_table_entries": 1629.638888888889,
+            "mean_incoming_entries": 479.57380952380953
+          }
+        }
+      },
+      "neo_reuse_update": {
+        "traffic_MB": 410.397424,
+        "baseline_traffic_MB": 760.17008,
+        "traffic_MB_without_deferred_depth_update": 599.952016,
+        "deferred_depth_update_savings_pct": 31.5949587541681,
+        "per_scene": {
+          "rapid_camera_motion.scene0": {
+            "traffic_reduction_pct": 42.44931685474205,
+            "psnr_drop_db": 0.23345199791823157,
+            "mean_abs_rank_error": 25.636769999277746,
+            "mean_table_entries": 2577.545238095238,
+            "mean_incoming_entries": 688.9861111111111
+          },
+          "rapid_camera_motion.scene1": {
+            "traffic_reduction_pct": 50.47510330125964,
+            "psnr_drop_db": 0.12259873488595815,
+            "mean_abs_rank_error": 21.45437431936898,
+            "mean_table_entries": 2103.9984126984127,
+            "mean_incoming_entries": 479.57380952380953
+          }
+        }
+      }
+    }
+  }
+}
